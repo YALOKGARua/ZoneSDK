@@ -1,0 +1,15 @@
+{
+  "id": "2bd3f115",
+  "sha256": "2BD3F115B959A8EEE7E5C4B42B0142DD0025BD437E1014F92DFC60B9AFEE5479",
+  "file_size": "174735920",
+  "image_size": "0xB954000",
+  "stamp": "0x2B1AEEBF",
+  "objects_root": "0xA0D4990",
+  "objects_count": "0xA0D49A4",
+  "exit_anchor": "0x4186886",
+  "exit_store": "0x41868CD",
+  "exit_flag": "0x9FC9600",
+  "exe": "Stalker2-Win64-Shipping.exe",
+  "game_build_date": "2026-10-21",
+  "dump": "ufunctions.txt is read from the native function tables in this build's exe: every native function that has a name of the 61bc1e03 dump or of the shared verb catalog"
+}

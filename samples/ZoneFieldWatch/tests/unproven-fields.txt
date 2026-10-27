@@ -1,0 +1,1 @@
+Camera.ViewFOV: the FOV of the cached camera view, +0x17F0 in PlayerCameraManager. It is no reflected property of its own, and GetFOVAngle reaches it in two steps (add rcx, 0x17C0 and then movss xmm0, [rcx+0x30]), so no single guard holds the whole offset. It stays unproven: the sample never reads it, and the SDK refuses every read of it.

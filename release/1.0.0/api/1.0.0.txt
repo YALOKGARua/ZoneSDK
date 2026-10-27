@@ -1,0 +1,1029 @@
+zsdk-api 1
+version 1.0.0
+app.h	namespace	zsdk	-	-	Stable
+app.h	namespace	zsdk::ini	-	-	Stable
+app.h	type	zsdk::Identity	-	struct Identity	Stable
+app.h	field	zsdk::Identity::name	0	const char *name	Stable
+app.h	field	zsdk::Identity::tag	1	const char *tag	Stable
+app.h	field	zsdk::Identity::description	2	const char *description	Stable
+app.h	field	zsdk::Identity::version	3	const char *version	Stable
+app.h	field	zsdk::Identity::folder	4	const wchar_t *folder	Stable
+app.h	field	zsdk::Identity::ini	5	const wchar_t *ini	Stable
+app.h	field	zsdk::Identity::log	6	const wchar_t *log	Stable
+app.h	field	zsdk::Identity::rolled	7	const wchar_t *rolled	Stable
+app.h	field	zsdk::Identity::registry	8	const char *registry	Stable
+app.h	type	zsdk::WorldVerbs	-	struct WorldVerbs	Stable
+app.h	field	zsdk::WorldVerbs::controller	0	int controller	Stable
+app.h	field	zsdk::WorldVerbs::pawn	1	int pawn	Stable
+app.h	field	zsdk::WorldVerbs::camera	2	int camera	Stable
+app.h	field	zsdk::WorldVerbs::seconds	3	int seconds	Stable
+app.h	field	zsdk::WorldVerbs::paused	4	int paused	Stable
+app.h	field	zsdk::WorldVerbs::frames	5	int frames	Stable
+app.h	field	zsdk::WorldVerbs::map	6	const char *map	Stable
+app.h	type	zsdk::CensusSpec	-	struct CensusSpec	Stable
+app.h	field	zsdk::CensusSpec::statics	0	const char *const *statics	Stable
+app.h	field	zsdk::CensusSpec::staticCount	1	int staticCount	Stable
+app.h	field	zsdk::CensusSpec::hosts	2	const char *const *hosts	Stable
+app.h	field	zsdk::CensusSpec::hostCount	3	int hostCount	Stable
+app.h	type	zsdk::App	-	struct App	Stable
+app.h	field	zsdk::App::identity	0	Identity identity	Stable
+app.h	field	zsdk::App::policy	1	Policy policy	Stable
+app.h	field	zsdk::App::specs	2	std::span<const verbs::Spec> specs	Stable
+app.h	field	zsdk::App::world	3	WorldVerbs world	Stable
+app.h	field	zsdk::App::census	4	CensusSpec census	Stable
+app.h	field	zsdk::App::rows	5	std::span<const lang::Row> rows	Stable
+app.h	field	zsdk::App::schema	6	const ini::Schema *schema	Stable
+app.h	field	zsdk::App::row	7	registry::Row row	Stable
+app.h	field	zsdk::App::sets	8	std::span<const guard::Set *const> sets	Stable
+app.h	namespace	zsdk::app	-	-	Stable
+app.h	fn	zsdk::app::Get	-	const App &Get()	Stable
+app.h	fn	zsdk::app::Row	-	const registry::Row *Row()	Stable
+app.h	fn	zsdk::app::Lane	-	float Lane()	Stable
+app.h	fn	zsdk::WakeName	-	std::wstring WakeName(const Identity &identity)	Stable
+app.h	fn	zsdk::MutexShape	-	std::wstring MutexShape(const Identity &identity)	Stable
+base.h	namespace	zsdk	-	-	Stable
+base.h	var	zsdk::kNaN	-	inline constexpr double kNaN	Stable
+base.h	fn	zsdk::Ms	-	double Ms()	Stable
+base.h	fn	zsdk::Now	-	uint64_t Now()	Stable
+base.h	fn	zsdk::Age	-	inline constexpr uint64_t Age(uint64_t now, uint64_t at)	Stable
+base.h	fn	zsdk::Addr	-	inline uintptr_t Addr(const void *thing)	Stable
+call.h	namespace	zsdk	-	-	Stable
+call.h	type	zsdk::Refused	-	struct Refused : std::runtime_error	Stable
+call.h	using	zsdk::Refused::runtime_error	-	using std::runtime_error::runtime_error	Stable
+call.h	type	zsdk::Fault	-	struct Fault : std::runtime_error	Stable
+call.h	using	zsdk::Fault::runtime_error	-	using std::runtime_error::runtime_error	Stable
+call.h	type	zsdk::Fn	-	struct Fn	Stable
+call.h	field	zsdk::Fn::function	0	const void *function	Stable
+call.h	field	zsdk::Fn::owner	1	const void *owner	Stable
+call.h	field	zsdk::Fn::sign	2	ue::Sign sign	Stable
+call.h	field	zsdk::Fn::missing	3	bool missing	Stable
+call.h	field	zsdk::Fn::widened	4	bool widened	Stable
+call.h	fn	zsdk::Lookup	-	Fn &Lookup(const char *owner, const char *name, const void *target = nullptr)	Stable
+call.h	type	zsdk::Call	-	class Call	Stable
+call.h	fn	zsdk::Call::Call	-	Call(std::span<const verbs::Spec> table, int verb, const void *on = nullptr)	Stable
+call.h	fn	zsdk::Call::Call	-	Call(const char *owner, const char *name, const void *on = nullptr)	Stable
+call.h	fn	zsdk::Call::Has	-	bool Has(const char *name) const	Stable
+call.h	fn	zsdk::Call::Find	-	const ue::Param *Find(const char *name) const	Stable
+call.h	fn	zsdk::Call::Data	-	const uint8_t *Data() const	Stable
+call.h	fn	zsdk::Call::Parameter	-	const ue::Param &Parameter(const char *name) const	Stable
+call.h	fn	zsdk::Call::Put	-	void Put(const char *name, const void *source, size_t bytes)	Stable
+call.h	fn	zsdk::Call::Set	-	template<class T> void Set(const char *name, const T &value)	Stable
+call.h	fn	zsdk::Call::Try	-	template<class T> void Try(const char *name, const T &value)	Stable
+call.h	fn	zsdk::Call::Wide	-	void Wide(const char *name, int64_t value)	Stable
+call.h	fn	zsdk::Call::Widened	-	int64_t Widened(const char *name) const	Stable
+call.h	fn	zsdk::Call::CopyFrom	-	void CopyFrom(const char *name, const Call &source, const char *sourceName)	Stable
+call.h	fn	zsdk::Call::Get	-	template<class T> T Get(const char *name) const	Stable
+call.h	fn	zsdk::Call::Yes	-	bool Yes(const char *name) const	Stable
+call.h	fn	zsdk::Call::CopyText	-	std::wstring CopyText(const char *name) const	Stable
+call.h	fn	zsdk::Call::Key	-	const std::string &Key() const	Stable
+call.h	fn	zsdk::Call::Function	-	const Fn &Function() const	Stable
+call.h	fn	zsdk::Call::Target	-	const void *Target() const	Stable
+call.h	fn	zsdk::Call::Risky	-	bool Risky() const	Stable
+call.h	fn	zsdk::Fire	-	void Fire(Call &call)	Stable
+call.h	fn	zsdk::Fire	-	void Fire(Call &call, std::string_view key)	Stable
+census.h	namespace	zsdk::census	-	-	Provisional
+census.h	var	zsdk::census::kSlots	-	inline constexpr size_t kSlots	Provisional
+census.h	var	zsdk::census::kInstanceCap	-	inline constexpr size_t kInstanceCap	Provisional
+census.h	type	zsdk::census::Snapshot	-	struct Snapshot	Provisional
+census.h	field	zsdk::census::Snapshot::epoch	0	uint32_t epoch	Provisional
+census.h	field	zsdk::census::Snapshot::at	1	uint64_t at	Provisional
+census.h	field	zsdk::census::Snapshot::gi	2	const void *gi	Provisional
+census.h	field	zsdk::census::Snapshot::gis	3	std::vector<const void *> gis	Provisional
+census.h	field	zsdk::census::Snapshot::statics	4	std::array<const void *, kSlots> statics	Provisional
+census.h	field	zsdk::census::Snapshot::hosts	5	std::array<const void *, kSlots> hosts	Provisional
+census.h	field	zsdk::census::Snapshot::sweepMs	6	double sweepMs	Provisional
+census.h	field	zsdk::census::Snapshot::objects	7	int objects	Provisional
+census.h	fn	zsdk::census::Current	-	std::shared_ptr<const Snapshot> Current()	Provisional
+census.h	fn	zsdk::census::Want	-	void Want(const char *reason)	Provisional
+census.h	fn	zsdk::census::Epoch	-	uint32_t Epoch()	Provisional
+census.h	fn	zsdk::census::Sweeps	-	int Sweeps()	Provisional
+census.h	fn	zsdk::census::Fresh	-	bool Fresh(const Snapshot &snapshot, uint32_t epoch, uint64_t since)	Provisional
+census.h	fn	zsdk::census::Host	-	const void *Host(size_t slot)	Provisional
+census.h	fn	zsdk::census::Consoles	-	bool Consoles()	Provisional
+exe.h	namespace	zsdk::exe	-	-	Stable
+exe.h	var	zsdk::exe::kSteamFile	-	inline constexpr const wchar_t *kSteamFile	Stable
+exe.h	fn	zsdk::exe::File	-	std::wstring File()	Stable
+exe.h	fn	zsdk::exe::Name	-	std::string Name()	Stable
+exe.h	fn	zsdk::exe::Game	-	bool Game(std::wstring_view file)	Stable
+exe.h	fn	zsdk::exe::Steam	-	bool Steam(std::wstring_view file)	Stable
+exe.h	fn	zsdk::exe::Steam	-	bool Steam()	Stable
+exe.h	fn	zsdk::exe::Base	-	uintptr_t Base()	Stable
+exe.h	fn	zsdk::exe::ImageSize	-	uint32_t ImageSize()	Stable
+exe.h	fn	zsdk::exe::Stamp	-	uint32_t Stamp()	Stable
+exe.h	fn	zsdk::exe::Hash	-	std::string Hash()	Stable
+exe.h	fn	zsdk::exe::Sha	-	std::string Sha()	Stable
+exe.h	fn	zsdk::exe::Short	-	std::string Short()	Stable
+exe.h	fn	zsdk::exe::Hashed	-	bool Hashed()	Stable
+exe.h	fn	zsdk::exe::Known	-	bool Known()	Stable
+exe.h	fn	zsdk::exe::Build	-	const guard::Build *Build()	Stable
+glyphs.h	namespace	zsdk::glyphs	-	-	Stable
+glyphs.h	type	zsdk::glyphs::Run	-	struct Run	Stable
+glyphs.h	field	zsdk::glyphs::Run::first	0	int first	Stable
+glyphs.h	field	zsdk::glyphs::Run::count	1	int count	Stable
+glyphs.h	var	zsdk::glyphs::kRuns	-	inline constexpr Run kRuns[]	Stable
+glyphs.h	fn	zsdk::glyphs::Drawable	-	constexpr bool Drawable(uint32_t point)	Stable
+glyphs.h	fn	zsdk::glyphs::Undrawn	-	std::string Undrawn(std::string_view utf8)	Stable
+guard.h	namespace	zsdk::guard	-	-	Stable
+guard.h	type	zsdk::guard::Build	-	struct Build	Stable
+guard.h	field	zsdk::guard::Build::id	0	const char *id	Stable
+guard.h	field	zsdk::guard::Build::sha256	1	const char *sha256	Stable
+guard.h	field	zsdk::guard::Build::imageSize	2	uint32_t imageSize	Stable
+guard.h	field	zsdk::guard::Build::stamp	3	uint32_t stamp	Stable
+guard.h	field	zsdk::guard::Build::objectsRoot	4	uint32_t objectsRoot	Stable
+guard.h	field	zsdk::guard::Build::objectsCount	5	uint32_t objectsCount	Stable
+guard.h	var	zsdk::guard::k61bc1e03	-	inline constexpr Build k61bc1e03	Stable
+guard.h	var	zsdk::guard::k2bd3f115	-	inline constexpr Build k2bd3f115	Stable
+guard.h	var	zsdk::guard::kBuilds	-	inline constexpr const Build *kBuilds[]	Stable
+guard.h	var	zsdk::guard::kImageBase	-	inline constexpr uintptr_t kImageBase	Stable
+guard.h	type	zsdk::guard::Guard	-	struct Guard	Stable
+guard.h	field	zsdk::guard::Guard::rva	0	uint32_t rva	Stable
+guard.h	field	zsdk::guard::Guard::bytes	1	const char *bytes	Stable
+guard.h	enum	zsdk::guard::Need	-	enum class Need : uint8_t	Stable
+guard.h	value	zsdk::guard::Need::Bytes	0	Bytes	Stable
+guard.h	value	zsdk::guard::Need::ImageSize	1	ImageSize	Stable
+guard.h	value	zsdk::guard::Need::KnownBuild	2	KnownBuild	Stable
+guard.h	type	zsdk::guard::Set	-	struct Set	Stable
+guard.h	field	zsdk::guard::Set::name	0	const char *name	Stable
+guard.h	field	zsdk::guard::Set::build	1	const Build *build	Stable
+guard.h	field	zsdk::guard::Set::guards	2	const Guard *guards	Stable
+guard.h	field	zsdk::guard::Set::count	3	size_t count	Stable
+guard.h	field	zsdk::guard::Set::need	4	Need need	Stable
+guard.h	enum	zsdk::guard::State	-	enum class State : uint8_t	Stable
+guard.h	value	zsdk::guard::State::Pending	0	Pending	Stable
+guard.h	value	zsdk::guard::State::Ok	1	Ok	Stable
+guard.h	value	zsdk::guard::State::Off	2	Off	Stable
+guard.h	type	zsdk::guard::Report	-	struct Report	Stable
+guard.h	field	zsdk::guard::Report::ok	0	int ok	Stable
+guard.h	field	zsdk::guard::Report::total	1	int total	Stable
+guard.h	field	zsdk::guard::Report::image	2	uint32_t image	Stable
+guard.h	field	zsdk::guard::Report::imageOk	3	bool imageOk	Stable
+guard.h	field	zsdk::guard::Report::known	4	bool known	Stable
+guard.h	field	zsdk::guard::Report::bad	5	std::string bad	Stable
+guard.h	field	zsdk::guard::Report::state	6	State state	Stable
+guard.h	type	zsdk::guard::Anchor	-	struct Anchor	Stable
+guard.h	field	zsdk::guard::Anchor::va	0	uint64_t va	Stable
+guard.h	field	zsdk::guard::Anchor::bytes	1	const char *bytes	Stable
+guard.h	field	zsdk::guard::Anchor::disp	2	int disp	Stable
+guard.h	field	zsdk::guard::Anchor::next	3	int next	Stable
+guard.h	enum	zsdk::guard::Proof	-	enum class Proof : uint8_t	Stable
+guard.h	value	zsdk::guard::Proof::Guard	0	Guard	Stable
+guard.h	value	zsdk::guard::Proof::Rip	1	Rip	Stable
+guard.h	value	zsdk::guard::Proof::Reflected	2	Reflected	Stable
+guard.h	value	zsdk::guard::Proof::Unproven	3	Unproven	Stable
+guard.h	type	zsdk::guard::Field	-	struct Field	Stable
+guard.h	field	zsdk::guard::Field::name	0	const char *name	Stable
+guard.h	field	zsdk::guard::Field::at	1	uint32_t at	Stable
+guard.h	field	zsdk::guard::Field::set	2	const Set *set	Stable
+guard.h	field	zsdk::guard::Field::guard	3	int guard	Stable
+guard.h	field	zsdk::guard::Field::offset	4	int offset	Stable
+guard.h	field	zsdk::guard::Field::reflectedClass	5	const char *reflectedClass	Stable
+guard.h	field	zsdk::guard::Field::reflectedProperty	6	const char *reflectedProperty	Stable
+guard.h	field	zsdk::guard::Field::proof	7	Proof proof	Stable
+guard.h	fn	zsdk::guard::Field::Field	-	consteval Field(const char *n, uint32_t a, const Set &s, int g, int o)	Stable
+guard.h	fn	zsdk::guard::Field::Field	-	consteval Field(const char *n, uint32_t a, const char *klass, const char *property)	Stable
+guard.h	fn	zsdk::guard::Field::Rip	-	static consteval Field Rip(const char *n, uint32_t rva, const Set &s, int g, int disp, int next, int addend = 0)	Stable
+guard.h	fn	zsdk::guard::Field::Unproven	-	static consteval Field Unproven(const char *n, uint32_t a)	Stable
+guard.h	fn	zsdk::guard::Field::Raw	-	constexpr uintptr_t Raw() const	Stable
+guard.h	fn	zsdk::guard::Hex	-	bool Hex(const char *bytes, std::vector<int> &out)	Stable
+guard.h	fn	zsdk::guard::Matches	-	bool Matches(uintptr_t at, const char *bytes)	Stable
+guard.h	fn	zsdk::guard::Base	-	uintptr_t Base()	Stable
+guard.h	fn	zsdk::guard::At	-	uintptr_t At(const Anchor &anchor)	Stable
+guard.h	fn	zsdk::guard::Target	-	uintptr_t Target(uintptr_t at, int disp, int next)	Stable
+guard.h	fn	zsdk::guard::Resolve	-	uintptr_t Resolve(const Anchor &anchor)	Stable
+guard.h	fn	zsdk::guard::Check	-	Report Check(const Set &set)	Stable
+guard.h	fn	zsdk::guard::Of	-	State Of(const Set &set)	Stable
+guard.h	fn	zsdk::guard::Ready	-	bool Ready(const Set &set)	Stable
+guard.h	fn	zsdk::guard::Recheck	-	int Recheck()	Stable
+guard.h	fn	zsdk::guard::Usable	-	bool Usable(const Field &field)	Stable
+guard.h	fn	zsdk::guard::Confirm	-	bool Confirm(const Field &field)	Stable
+guard.h	fn	zsdk::guard::Use	-	bool Use(const Field &field, uintptr_t &at)	Stable
+guard.h	fn	zsdk::guard::Find	-	const Build *Find(std::string_view sha)	Stable
+guard.h	fn	zsdk::guard::Own	-	std::span<const Set *const> Own()	Stable
+hooks.h	namespace	reshade::api	-	-	Stable
+hooks.h	namespace	zsdk	-	-	Stable
+hooks.h	type	zsdk::Hooks	-	struct Hooks	Stable
+hooks.h	field	zsdk::Hooks::boot	0	void (*boot)()	Stable
+hooks.h	field	zsdk::Hooks::refresh	1	void (*refresh)(bool again)	Stable
+hooks.h	field	zsdk::Hooks::prime	2	void (*prime)()	Stable
+hooks.h	field	zsdk::Hooks::advance	3	void (*advance)()	Stable
+hooks.h	field	zsdk::Hooks::step	4	void (*step)(uint64_t now)	Stable
+hooks.h	field	zsdk::Hooks::hot	5	bool (*hot)()	Stable
+hooks.h	field	zsdk::Hooks::publish	6	void (*publish)(uint64_t now)	Stable
+hooks.h	field	zsdk::Hooks::turn	7	void (*turn)(const world::Turn &turn)	Stable
+hooks.h	field	zsdk::Hooks::order	8	void (*order)(int order)	Stable
+hooks.h	field	zsdk::Hooks::orderName	9	const char *(*orderName)(int order)	Stable
+hooks.h	field	zsdk::Hooks::quit	10	void (*quit)()	Stable
+hooks.h	field	zsdk::Hooks::census	11	void (*census)(const census::Snapshot &snapshot)	Stable
+hooks.h	field	zsdk::Hooks::complete	12	bool (*complete)(const census::Snapshot &snapshot)	Stable
+hooks.h	field	zsdk::Hooks::frame	13	void (*frame)(const Input &input)	Stable
+hooks.h	field	zsdk::Hooks::overlay	14	void (*overlay)(Overlay &overlay)	Stable
+hooks.h	field	zsdk::Hooks::page	15	void (*page)(Overlay &overlay)	Stable
+hooks.h	field	zsdk::Hooks::opened	16	void (*opened)(bool open)	Stable
+hooks.h	field	zsdk::Hooks::stop	17	void (*stop)()	Stable
+hooks.h	field	zsdk::Hooks::words	18	std::string (*words)(const toast::Item &item, lang::Lang ui)	Stable
+hooks.h	field	zsdk::Hooks::tone	19	uint32_t (*tone)(const toast::Item &item)	Stable
+hooks.h	field	zsdk::Hooks::pipelineInit	20	void (*pipelineInit)(reshade::api::device *device, uint64_t layout, uint32_t count, const reshade::api::pipeline_subobject *subobjects, uint64_t pipeline)	Stable
+hooks.h	field	zsdk::Hooks::pipelineBind	21	void (*pipelineBind)(reshade::api::command_list *list, uint32_t stages, uint64_t pipeline)	Stable
+hooks.h	field	zsdk::Hooks::pipelineDestroy	22	void (*pipelineDestroy)(reshade::api::device *device, uint64_t pipeline)	Stable
+hooks.h	field	zsdk::Hooks::deviceDestroy	23	void (*deviceDestroy)(reshade::api::device *device)	Stable
+hooks.h	field	zsdk::Hooks::report	24	std::string (*report)()	Stable
+hooks.h	namespace	zsdk::hooks	-	-	Stable
+hooks.h	fn	zsdk::hooks::Bind	-	void Bind(const Hooks &hooks)	Stable
+hooks.h	fn	zsdk::hooks::Get	-	const Hooks &Get()	Stable
+ini.h	namespace	zsdk::ini	-	-	Stable
+ini.h	type	zsdk::ini::Entry	-	struct Entry	Stable
+ini.h	field	zsdk::ini::Entry::section	0	std::string section	Stable
+ini.h	field	zsdk::ini::Entry::key	1	std::string key	Stable
+ini.h	field	zsdk::ini::Entry::value	2	std::string value	Stable
+ini.h	fn	zsdk::ini::Entry::operator==	-	friend bool operator==(const Entry &, const Entry &) = default	Stable
+ini.h	type	zsdk::ini::Kept	-	struct Kept	Stable
+ini.h	field	zsdk::ini::Kept::session	0	std::string session	Stable
+ini.h	field	zsdk::ini::Kept::pending	1	std::string pending	Stable
+ini.h	field	zsdk::ini::Kept::disabled	2	std::vector<std::string> disabled	Stable
+ini.h	field	zsdk::ini::Kept::watch	3	std::vector<std::string> watch	Stable
+ini.h	field	zsdk::ini::Kept::proven	4	std::map<std::string, std::string> proven	Stable
+ini.h	field	zsdk::ini::Kept::owned	5	std::map<std::string, std::map<std::string, std::string>> owned	Stable
+ini.h	field	zsdk::ini::Kept::unknown	6	std::vector<Entry> unknown	Stable
+ini.h	field	zsdk::ini::Kept::addon	7	std::string addon	Stable
+ini.h	fn	zsdk::ini::Kept::operator==	-	friend bool operator==(const Kept &, const Kept &) = default	Stable
+ini.h	type	zsdk::ini::Limits	-	struct Limits	Stable
+ini.h	const	zsdk::ini::Limits::kUnknownKept	-	static constexpr size_t kUnknownKept	Stable
+ini.h	const	zsdk::ini::Limits::kDisabledKept	-	static constexpr size_t kDisabledKept	Stable
+ini.h	const	zsdk::ini::Limits::kWatchKept	-	static constexpr size_t kWatchKept	Stable
+ini.h	const	zsdk::ini::Limits::kWatchCap	-	static constexpr size_t kWatchCap	Stable
+ini.h	const	zsdk::ini::Limits::kTextMost	-	static constexpr size_t kTextMost	Stable
+ini.h	type	zsdk::ini::Visitor	-	class Visitor	Stable
+ini.h	fn	zsdk::ini::Visitor::~Visitor	-	virtual ~Visitor() = default	Stable
+ini.h	fn	zsdk::ini::Visitor::Flag	-	virtual void Flag(const char *section, const char *key, bool &value) = 0	Stable
+ini.h	fn	zsdk::ini::Visitor::Whole	-	virtual void Whole(const char *section, const char *key, int &value, int def, int low, int high) = 0	Stable
+ini.h	fn	zsdk::ini::Visitor::Real	-	virtual void Real(const char *section, const char *key, double &value, double def, double low, double high) = 0	Stable
+ini.h	fn	zsdk::ini::Visitor::Word	-	virtual void Word(const char *section, const char *key, std::string &value, const char *def, const char *const *choices, int count) = 0	Stable
+ini.h	fn	zsdk::ini::Visitor::Pick	-	virtual void Pick(const char *section, const char *key, int &value, const char *const *names, int count, int def) = 0	Stable
+ini.h	fn	zsdk::ini::Visitor::Key	-	virtual void Key(const char *section, const char *key, keys::Chord &value, keys::Chord def) = 0	Stable
+ini.h	fn	zsdk::ini::Visitor::Text	-	virtual void Text(const char *section, const char *key, std::string &value, size_t most)	Stable
+ini.h	fn	zsdk::ini::Choice	-	template<class E, size_t N> void Choice(Visitor &v, const char *section, const char *key, E &value, const char *const (&names)[N], E def)	Stable
+ini.h	type	zsdk::ini::Owned	-	struct Owned	Stable
+ini.h	field	zsdk::ini::Owned::name	0	const char *name	Stable
+ini.h	field	zsdk::ini::Owned::cap	1	size_t cap	Stable
+ini.h	type	zsdk::ini::Schema	-	struct Schema	Stable
+ini.h	field	zsdk::ini::Schema::head	0	const char *head	Stable
+ini.h	field	zsdk::ini::Schema::visit	1	void (*visit)(void *settings, Visitor &v)	Stable
+ini.h	field	zsdk::ini::Schema::fix	2	void (*fix)(void *settings)	Stable
+ini.h	field	zsdk::ini::Schema::make	3	void *(*make)()	Stable
+ini.h	field	zsdk::ini::Schema::drop	4	void (*drop)(void *settings)	Stable
+ini.h	field	zsdk::ini::Schema::copy	5	void (*copy)(void *to, const void *from)	Stable
+ini.h	field	zsdk::ini::Schema::same	6	bool (*same)(const void *a, const void *b)	Stable
+ini.h	field	zsdk::ini::Schema::level	7	int (*level)(const void *settings)	Stable
+ini.h	field	zsdk::ini::Schema::language	8	const char *(*language)(const void *settings)	Stable
+ini.h	field	zsdk::ini::Schema::owned	9	const Owned *owned	Stable
+ini.h	field	zsdk::ini::Schema::ownedCount	10	size_t ownedCount	Stable
+ini.h	type	zsdk::ini::Typed	-	template<class S> struct Typed	Stable
+ini.h	fn	zsdk::ini::Typed::Make	-	static void *Make()	Stable
+ini.h	fn	zsdk::ini::Typed::Drop	-	static void Drop(void *settings)	Stable
+ini.h	fn	zsdk::ini::Typed::Copy	-	static void Copy(void *to, const void *from)	Stable
+ini.h	fn	zsdk::ini::Typed::Same	-	static bool Same(const void *a, const void *b)	Stable
+ini.h	fn	zsdk::ini::VisitThunk	-	template<class S, void (*V)(S &, Visitor &)> void VisitThunk(void *settings, Visitor &v)	Stable
+ini.h	fn	zsdk::ini::FixThunk	-	template<class S, void (*F)(S &)> void FixThunk(void *settings)	Stable
+ini.h	fn	zsdk::ini::LevelThunk	-	template<class S, int (*L)(const S &)> int LevelThunk(const void *settings)	Stable
+ini.h	fn	zsdk::ini::LanguageThunk	-	template<class S, const char *(*G)(const S &)> const char *LanguageThunk(const void *settings)	Stable
+ini.h	fn	zsdk::ini::Make	-	template<class S, void (*V)(S &, Visitor &), void (*F)(S &), int (*L)(const S &), const char *(*G)(const S &)> constexpr Schema Make(const char *head, const Owned *owned, size_t ownedCount)	Stable
+ini.h	fn	zsdk::ini::Bound	-	const Schema &Bound()	Stable
+ini.h	fn	zsdk::ini::Open	-	bool Open(const std::filesystem::path &folder = {})	Stable
+ini.h	fn	zsdk::ini::Close	-	void Close()	Stable
+ini.h	fn	zsdk::ini::Folder	-	std::filesystem::path Folder()	Stable
+ini.h	fn	zsdk::ini::LogPath	-	std::filesystem::path LogPath()	Stable
+ini.h	fn	zsdk::ini::ExitPath	-	std::filesystem::path ExitPath()	Stable
+ini.h	fn	zsdk::ini::Tick	-	void Tick()	Stable
+ini.h	fn	zsdk::ini::Revision	-	uint64_t Revision()	Stable
+ini.h	fn	zsdk::ini::Touch	-	void Touch()	Stable
+ini.h	fn	zsdk::ini::Dirty	-	bool Dirty()	Stable
+ini.h	fn	zsdk::ini::Save	-	bool Save()	Stable
+ini.h	fn	zsdk::ini::Ledger	-	Kept Ledger()	Stable
+ini.h	fn	zsdk::ini::Language	-	std::string Language()	Stable
+ini.h	fn	zsdk::ini::Check	-	void Check(void *(*make)())	Stable
+ini.h	fn	zsdk::ini::Config	-	template<class S> S Config()	Stable
+ini.h	fn	zsdk::ini::Apply	-	template<class S> void Apply(const S &settings)	Stable
+ini.h	fn	zsdk::ini::Parse	-	template<class S> void Parse(std::string_view text, S &settings, Kept *keep = nullptr)	Stable
+ini.h	fn	zsdk::ini::Text	-	template<class S> std::string Text(const S &settings, const Kept &keep = {})	Stable
+ini.h	fn	zsdk::ini::Sanitize	-	template<class S> S Sanitize(S settings)	Stable
+ini.h	fn	zsdk::ini::Section	-	std::map<std::string, std::string> Section(std::string_view name)	Stable
+ini.h	fn	zsdk::ini::Store	-	bool Store(std::string_view name, const std::map<std::string, std::string> &values)	Stable
+ini.h	fn	zsdk::ini::Put	-	bool Put(std::string_view name, const std::string &key, const std::string &value)	Stable
+ini.h	fn	zsdk::ini::Stamp	-	std::string Stamp()	Stable
+ini.h	fn	zsdk::ini::Real	-	std::string Real(double value)	Stable
+ini.h	fn	zsdk::ini::WriteAtomic	-	bool WriteAtomic(const std::filesystem::path &path, std::string_view body)	Stable
+ini.h	fn	zsdk::ini::ReadFile	-	bool ReadFile(const std::filesystem::path &path, std::string &out, size_t limit = 1u <<20)	Stable
+input.h	namespace	zsdk	-	-	Stable
+input.h	type	zsdk::Input	-	class Input	Stable
+input.h	fn	zsdk::Input::Down	-	bool Down(uint32_t vk) const	Stable
+input.h	fn	zsdk::Input::Pressed	-	bool Pressed(uint32_t vk) const	Stable
+input.h	fn	zsdk::Input::Released	-	bool Released(uint32_t vk) const	Stable
+input.h	fn	zsdk::Input::MouseDown	-	bool MouseDown(int button) const	Stable
+input.h	fn	zsdk::Input::MousePressed	-	bool MousePressed(int button) const	Stable
+input.h	fn	zsdk::Input::Cursor	-	void Cursor(uint32_t &x, uint32_t &y, int16_t *wheel = nullptr) const	Stable
+input.h	fn	zsdk::Input::Async	-	bool Async(uint32_t vk) const	Stable
+input.h	fn	zsdk::Input::Mods	-	uint8_t Mods() const	Stable
+input.h	fn	zsdk::Input::Fires	-	bool Fires(keys::Chord chord) const	Stable
+input.h	fn	zsdk::Input::Focused	-	bool Focused() const	Stable
+input.h	fn	zsdk::Input::Overlaid	-	bool Overlaid() const	Stable
+input.h	fn	zsdk::Input::Menu	-	bool Menu() const	Stable
+input.h	fn	zsdk::Input::Paused	-	bool Paused() const	Stable
+job.h	namespace	zsdk::job	-	-	Provisional
+job.h	var	zsdk::job::kMost	-	inline constexpr int kMost	Provisional
+job.h	var	zsdk::job::kShortestMs	-	inline constexpr uint32_t kShortestMs	Provisional
+job.h	var	zsdk::job::kSlowMs	-	inline constexpr uint32_t kSlowMs	Provisional
+job.h	var	zsdk::job::kBudgetMs	-	inline constexpr uint32_t kBudgetMs	Provisional
+job.h	var	zsdk::job::kStallMs	-	inline constexpr uint32_t kStallMs	Provisional
+job.h	fn	zsdk::job::Every	-	bool Every(const char *name, uint32_t periodMs, void (*run)(uint64_t now))	Provisional
+job.h	fn	zsdk::job::Stopping	-	bool Stopping()	Provisional
+job.h	fn	zsdk::job::Off	-	bool Off(const char *name)	Provisional
+keys.h	namespace	zsdk::keys	-	-	Stable
+keys.h	var	zsdk::keys::kCtrl	-	inline constexpr uint8_t kCtrl	Stable
+keys.h	var	zsdk::keys::kShift	-	inline constexpr uint8_t kShift	Stable
+keys.h	var	zsdk::keys::kAlt	-	inline constexpr uint8_t kAlt	Stable
+keys.h	type	zsdk::keys::Chord	-	struct Chord	Stable
+keys.h	field	zsdk::keys::Chord::key	0	uint16_t key	Stable
+keys.h	field	zsdk::keys::Chord::mods	1	uint8_t mods	Stable
+keys.h	fn	zsdk::keys::Chord::operator==	-	friend bool operator==(const Chord &, const Chord &) = default	Stable
+keys.h	fn	zsdk::keys::Parse	-	Chord Parse(std::string_view text)	Stable
+keys.h	fn	zsdk::keys::Name	-	std::string Name(Chord chord)	Stable
+keys.h	fn	zsdk::keys::Glyph	-	std::string Glyph(uint16_t key, lang::Lang lang)	Stable
+keys.h	fn	zsdk::keys::Shown	-	std::string Shown(Chord chord, lang::Lang lang)	Stable
+keys.h	fn	zsdk::keys::Known	-	bool Known(uint16_t key)	Stable
+keys.h	fn	zsdk::keys::Modifier	-	bool Modifier(uint16_t key)	Stable
+keys.h	fn	zsdk::keys::Bindable	-	bool Bindable(Chord chord)	Stable
+keys.h	fn	zsdk::keys::Game	-	bool Game(uint16_t key)	Stable
+keys.h	fn	zsdk::keys::Numpad	-	bool Numpad(uint16_t key)	Stable
+keys.h	fn	zsdk::keys::Mods	-	uint8_t Mods(bool ctrl, bool shift, bool alt)	Stable
+keys.h	fn	zsdk::keys::Match	-	bool Match(Chord chord, uint16_t key, uint8_t mods)	Stable
+keys.h	fn	zsdk::keys::Exact	-	bool Exact(Chord chord, uint16_t key, uint8_t mods)	Stable
+keys.h	fn	zsdk::keys::Fires	-	bool Fires(Chord chord, uint16_t key, uint8_t mods)	Stable
+keys.h	fn	zsdk::keys::Which	-	int Which(Chord next, Chord back, uint16_t key, uint8_t mods)	Stable
+lang.h	namespace	zsdk::lang	-	-	Stable
+lang.h	enum	zsdk::lang::Lang	-	enum class Lang : uint8_t	Stable
+lang.h	value	zsdk::lang::Lang::Uk	0	Uk	Stable
+lang.h	value	zsdk::lang::Lang::En	1	En	Stable
+lang.h	value	zsdk::lang::Lang::Count	2	Count	Stable
+lang.h	type	zsdk::lang::Row	-	struct Row	Stable
+lang.h	field	zsdk::lang::Row::id	0	const char *id	Stable
+lang.h	field	zsdk::lang::Row::text	1	const char *text[static_cast<size_t>(Lang::Count)]	Stable
+lang.h	fn	zsdk::lang::Current	-	Lang Current()	Stable
+lang.h	fn	zsdk::lang::Set	-	void Set(Lang lang)	Stable
+lang.h	fn	zsdk::lang::Set	-	void Set(std::string_view code)	Stable
+lang.h	fn	zsdk::lang::Code	-	const char *Code(Lang lang)	Stable
+lang.h	fn	zsdk::lang::Valid	-	bool Valid(std::string_view code)	Stable
+lang.h	fn	zsdk::lang::Detect	-	Lang Detect()	Stable
+lang.h	fn	zsdk::lang::Detect	-	Lang Detect(const paths::Roots &roots)	Stable
+lang.h	fn	zsdk::lang::Text	-	const char *Text(std::string_view id)	Stable
+lang.h	fn	zsdk::lang::Text	-	const char *Text(std::string_view id, Lang lang)	Stable
+lang.h	fn	zsdk::lang::Has	-	bool Has(std::string_view id)	Stable
+lang.h	fn	zsdk::lang::Ids	-	std::vector<std::string_view> Ids()	Stable
+lang.h	fn	zsdk::lang::Defaults	-	std::span<const Row> Defaults()	Stable
+lang.h	fn	zsdk::lang::Format	-	std::string Format(std::string_view pattern, std::initializer_list<std::string> args)	Stable
+lang.h	fn	zsdk::lang::Format	-	std::string Format(std::string_view pattern, const std::vector<std::string> &args)	Stable
+lang.h	fn	zsdk::lang::Slots	-	std::vector<int> Slots(std::string_view pattern)	Stable
+lang.h	fn	zsdk::lang::Russian	-	bool Russian(std::string_view utf8)	Stable
+ledger.h	namespace	zsdk::ledger	-	-	Stable
+ledger.h	fn	zsdk::ledger::CleanStart	-	bool CleanStart()	Stable
+ledger.h	fn	zsdk::ledger::Stuck	-	bool Stuck()	Stable
+ledger.h	fn	zsdk::ledger::Closed	-	std::vector<std::string> Closed()	Stable
+ledger.h	fn	zsdk::ledger::Current	-	std::string Current()	Stable
+ledger.h	fn	zsdk::ledger::Last	-	std::string Last()	Stable
+ledger.h	fn	zsdk::ledger::Blocked	-	bool Blocked(std::string_view key)	Stable
+ledger.h	fn	zsdk::ledger::Proven	-	std::string Proven(std::string_view key)	Stable
+ledger.h	fn	zsdk::ledger::Disabled	-	std::vector<std::string> Disabled()	Stable
+ledger.h	fn	zsdk::ledger::Booted	-	std::vector<std::string> Booted()	Stable
+ledger.h	fn	zsdk::ledger::Watched	-	std::vector<std::string> Watched()	Stable
+ledger.h	fn	zsdk::ledger::Retry	-	void Retry()	Stable
+ledger.h	fn	zsdk::ledger::Watch	-	bool Watch(const std::string &key)	Stable
+ledger.h	fn	zsdk::ledger::Unwatch	-	bool Unwatch(const std::string &key, const std::string &build)	Stable
+ledger.h	fn	zsdk::ledger::Preloaded	-	bool Preloaded(std::string_view key)	Stable
+ledger.h	fn	zsdk::ledger::Preloaded	-	bool Preloaded(std::string_view key, std::string_view build)	Stable
+ledger.h	fn	zsdk::ledger::PreloadCount	-	size_t PreloadCount()	Stable
+ledger.h	fn	zsdk::ledger::Full	-	bool Full()	Stable
+ledger.h	fn	zsdk::ledger::WatchLimit	-	size_t WatchLimit()	Stable
+ledger.h	fn	zsdk::ledger::Addon	-	std::string Addon()	Stable
+ledger.h	type	zsdk::ledger::Window	-	class Window	Stable
+ledger.h	fn	zsdk::ledger::Window::Window	-	explicit Window(std::string key)	Stable
+ledger.h	fn	zsdk::ledger::Window::~Window	-	~Window()	Stable
+ledger.h	fn	zsdk::ledger::Window::Window	-	Window(const Window &) = delete	Stable
+ledger.h	fn	zsdk::ledger::Window::operator=	-	Window &operator=(const Window &) = delete	Stable
+ledger.h	fn	zsdk::ledger::Window::Close	-	void Close()	Stable
+ledger.h	fn	zsdk::ledger::Window::Armed	-	bool Armed() const	Stable
+ledger.h	fn	zsdk::ledger::Window::Open	-	bool Open() const	Stable
+ledger.h	fn	zsdk::ledger::Window::Refused	-	bool Refused() const	Stable
+ledger.h	fn	zsdk::ledger::Window::Key	-	const std::string &Key() const	Stable
+log.h	namespace	zsdk	-	-	Stable
+log.h	fn	zsdk::Log	-	void Log(const char *shape, ...)	Stable
+log.h	fn	zsdk::Note	-	void Note(int level, const char *shape, ...)	Stable
+log.h	fn	zsdk::Rare	-	void Rare(const char *tag, const char *shape, ...)	Stable
+log.h	fn	zsdk::Flush	-	void Flush()	Stable
+log.h	fn	zsdk::Urgent	-	void Urgent()	Stable
+log.h	namespace	zsdk::log	-	-	Stable
+log.h	fn	zsdk::log::Open	-	void Open(const std::filesystem::path &file, const std::filesystem::path &rolled)	Stable
+log.h	fn	zsdk::log::Path	-	std::filesystem::path Path()	Stable
+log.h	fn	zsdk::log::Level	-	int Level()	Stable
+log.h	fn	zsdk::log::SetLevel	-	void SetLevel(int level)	Stable
+log.h	fn	zsdk::log::Pending	-	size_t Pending()	Stable
+log.h	fn	zsdk::log::Dropped	-	size_t Dropped()	Stable
+log.h	fn	zsdk::log::Roll	-	void Roll(const std::filesystem::path &file, const std::filesystem::path &rolled)	Stable
+log.h	fn	zsdk::log::Masked	-	std::string Masked(std::string_view utf8)	Stable
+log.h	fn	zsdk::log::Shown	-	std::string Shown(const std::filesystem::path &path)	Stable
+math.h	namespace	zsdk::math	-	-	Stable
+math.h	type	zsdk::math::Vec3	-	struct Vec3	Stable
+math.h	field	zsdk::math::Vec3::x	0	double x	Stable
+math.h	field	zsdk::math::Vec3::y	1	double y	Stable
+math.h	field	zsdk::math::Vec3::z	2	double z	Stable
+math.h	fn	zsdk::math::Vec3::operator==	-	friend bool operator==(const Vec3 &, const Vec3 &) = default	Stable
+math.h	type	zsdk::math::Rot3	-	struct Rot3	Stable
+math.h	field	zsdk::math::Rot3::pitch	0	double pitch	Stable
+math.h	field	zsdk::math::Rot3::yaw	1	double yaw	Stable
+math.h	field	zsdk::math::Rot3::roll	2	double roll	Stable
+math.h	fn	zsdk::math::Rot3::operator==	-	friend bool operator==(const Rot3 &, const Rot3 &) = default	Stable
+math.h	fn	zsdk::math::Wrap	-	double Wrap(double yaw)	Stable
+math.h	fn	zsdk::math::Quarter	-	void Quarter(int meshYaw, double &c, double &s)	Stable
+math.h	fn	zsdk::math::Axes	-	void Axes(const Rot3 &r, Vec3 &x, Vec3 &y, Vec3 &z)	Stable
+math.h	fn	zsdk::math::FromAxes	-	Rot3 FromAxes(const Vec3 &x, const Vec3 &y, const Vec3 &z)	Stable
+math.h	fn	zsdk::math::Forward	-	Vec3 Forward(double heading)	Stable
+math.h	fn	zsdk::math::Left	-	Vec3 Left(double heading)	Stable
+math.h	fn	zsdk::math::Right	-	Vec3 Right(double heading)	Stable
+math.h	fn	zsdk::math::Across	-	Vec3 Across(const Vec3 &pos, double heading, double f, double l)	Stable
+math.h	fn	zsdk::math::MeshHalf	-	Vec3 MeshHalf(double f, double l, double u, int meshYaw)	Stable
+math.h	fn	zsdk::math::Dot	-	double Dot(const Vec3 &a, const Vec3 &b)	Stable
+math.h	fn	zsdk::math::Cross	-	Vec3 Cross(const Vec3 &a, const Vec3 &b)	Stable
+math.h	fn	zsdk::math::Unit	-	Vec3 Unit(const Vec3 &v)	Stable
+math.h	fn	zsdk::math::Length	-	double Length(const Vec3 &v)	Stable
+math.h	fn	zsdk::math::Flat	-	double Flat(const Vec3 &a, const Vec3 &b)	Stable
+math.h	fn	zsdk::math::Attitude	-	Rot3 Attitude(double heading, double pitch, double roll)	Stable
+math.h	fn	zsdk::math::Compose	-	Rot3 Compose(const Rot3 &outer, const Rot3 &inner)	Stable
+math.h	fn	zsdk::math::Place	-	Vec3 Place(const Vec3 &origin, const Rot3 &rot, const Vec3 &flu)	Stable
+math.h	fn	zsdk::math::Local	-	Vec3 Local(const Vec3 &origin, const Rot3 &rot, const Vec3 &world)	Stable
+math.h	fn	zsdk::math::Add	-	Vec3 Add(const Vec3 &a, const Vec3 &b)	Stable
+math.h	fn	zsdk::math::Sub	-	Vec3 Sub(const Vec3 &a, const Vec3 &b)	Stable
+math.h	fn	zsdk::math::Mul	-	Vec3 Mul(const Vec3 &a, double k)	Stable
+math.h	fn	zsdk::math::Ahead	-	Vec3 Ahead(const Rot3 &rot)	Stable
+mem.h	namespace	zsdk::mem	-	-	Stable
+mem.h	fn	zsdk::mem::Writable	-	bool Writable(const ledger::Window &window)	Stable
+mem.h	fn	zsdk::mem::Put	-	bool Put(const ledger::Window &window, uintptr_t at, const void *from, size_t bytes)	Stable
+mem.h	fn	zsdk::mem::Poke	-	bool Poke(void *at, const void *from, size_t bytes)	Stable
+mem.h	fn	zsdk::mem::Pokes	-	int Pokes()	Stable
+mem.h	fn	zsdk::mem::Write	-	template<class T> bool Write(const ledger::Window &window, uintptr_t at, const T &value)	Stable
+mem.h	fn	zsdk::mem::Write	-	template<class T> bool Write(const ledger::Window &window, uintptr_t base, const guard::Field &field, const T &value)	Stable
+mem.h	fn	zsdk::mem::Read	-	template<class T> bool Read(uintptr_t base, const guard::Field &field, T &out)	Stable
+overlay.h	namespace	zsdk	-	-	Stable
+overlay.h	type	zsdk::Overlay	-	struct Overlay	Stable
+overlay.h	field	zsdk::Overlay::runtime	0	reshade::api::effect_runtime *runtime	Stable
+overlay.h	field	zsdk::Overlay::scale	1	float scale	Stable
+overlay.h	field	zsdk::Overlay::ui	2	lang::Lang ui	Stable
+overlay.h	namespace	zsdk::overlay	-	-	Stable
+overlay.h	fn	zsdk::overlay::Inside	-	bool Inside()	Stable
+overlay.h	fn	zsdk::overlay::Ui	-	lang::Lang Ui()	Stable
+overlay.h	type	zsdk::overlay::Scope	-	class Scope	Stable
+overlay.h	fn	zsdk::overlay::Scope::Scope	-	Scope()	Stable
+overlay.h	fn	zsdk::overlay::Scope::~Scope	-	~Scope()	Stable
+overlay.h	fn	zsdk::overlay::Scope::Scope	-	Scope(const Scope &) = delete	Stable
+overlay.h	fn	zsdk::overlay::Scope::operator=	-	Scope &operator=(const Scope &) = delete	Stable
+overlay.h	namespace	zsdk::tab	-	-	Stable
+overlay.h	var	zsdk::tab::kShade	-	inline constexpr ImU32 kShade	Stable
+overlay.h	var	zsdk::tab::kAccent	-	inline constexpr ImU32 kAccent	Stable
+overlay.h	var	zsdk::tab::kWarn	-	inline constexpr ImU32 kWarn	Stable
+overlay.h	var	zsdk::tab::kGood	-	inline constexpr ImU32 kGood	Stable
+overlay.h	var	zsdk::tab::kText	-	inline constexpr ImU32 kText	Stable
+overlay.h	var	zsdk::tab::kDim	-	inline constexpr ImU32 kDim	Stable
+overlay.h	type	zsdk::tab::KeyTexts	-	struct KeyTexts	Stable
+overlay.h	field	zsdk::tab::KeyTexts::label	0	const char *label	Stable
+overlay.h	field	zsdk::tab::KeyTexts::press	1	const char *press	Stable
+overlay.h	field	zsdk::tab::KeyTexts::bad	2	const char *bad	Stable
+overlay.h	field	zsdk::tab::KeyTexts::game	3	const char *game	Stable
+overlay.h	type	zsdk::tab::DiagTexts	-	struct DiagTexts	Stable
+overlay.h	field	zsdk::tab::DiagTexts::title	0	const char *title	Stable
+overlay.h	field	zsdk::tab::DiagTexts::phase	1	const char *phase	Stable
+overlay.h	field	zsdk::tab::DiagTexts::exe	2	const char *exe	Stable
+overlay.h	field	zsdk::tab::DiagTexts::known	3	const char *known	Stable
+overlay.h	field	zsdk::tab::DiagTexts::other	4	const char *other	Stable
+overlay.h	field	zsdk::tab::DiagTexts::unknown	5	const char *unknown	Stable
+overlay.h	field	zsdk::tab::DiagTexts::verbs	6	const char *verbs	Stable
+overlay.h	field	zsdk::tab::DiagTexts::crashed	7	const char *crashed	Stable
+overlay.h	field	zsdk::tab::DiagTexts::none	8	const char *none	Stable
+overlay.h	field	zsdk::tab::DiagTexts::retry	9	const char *retry	Stable
+overlay.h	field	zsdk::tab::DiagTexts::log	10	const char *log	Stable
+overlay.h	field	zsdk::tab::DiagTexts::sdk	11	const char *sdk	Stable
+overlay.h	field	zsdk::tab::DiagTexts::yes	12	const char *yes	Stable
+overlay.h	field	zsdk::tab::DiagTexts::no	13	const char *no	Stable
+overlay.h	field	zsdk::tab::DiagTexts::markers	14	const char *markers	Stable
+overlay.h	field	zsdk::tab::DiagTexts::full	15	const char *full	Stable
+overlay.h	field	zsdk::tab::DiagTexts::pump	16	const char *pump	Stable
+overlay.h	field	zsdk::tab::DiagTexts::report	17	const char *report	Stable
+overlay.h	field	zsdk::tab::DiagTexts::copied	18	const char *copied	Stable
+overlay.h	field	zsdk::tab::DiagTexts::unsaved	19	const char *unsaved	Stable
+overlay.h	field	zsdk::tab::DiagTexts::unsupported	20	const char *unsupported	Stable
+overlay.h	field	zsdk::tab::DiagTexts::foreign	21	const char *foreign	Stable
+overlay.h	fn	zsdk::tab::Size	-	float Size()	Stable
+overlay.h	fn	zsdk::tab::Field	-	float Field()	Stable
+overlay.h	fn	zsdk::tab::Fixed	-	std::string Fixed(double value, int digits)	Stable
+overlay.h	fn	zsdk::tab::Fade	-	ImU32 Fade(ImU32 tone, float k)	Stable
+overlay.h	fn	zsdk::tab::Label	-	void Label(const std::string &text, ImU32 tone = kText, bool framed = false)	Stable
+overlay.h	fn	zsdk::tab::Wrapped	-	void Wrapped(const std::string &text, ImU32 tone = kText)	Stable
+overlay.h	fn	zsdk::tab::Beside	-	void Beside(const std::string &text, ImU32 tone = kText)	Stable
+overlay.h	fn	zsdk::tab::Box	-	bool Box(const char *id, const std::string &text, bool &value, ImU32 tone = kText)	Stable
+overlay.h	fn	zsdk::tab::Whole	-	bool Whole(const char *id, const char *text, int &value, int low, int high)	Stable
+overlay.h	fn	zsdk::tab::Real	-	bool Real(const char *id, const char *text, double &value, double low, double high, const char *format, double step)	Stable
+overlay.h	fn	zsdk::tab::Button	-	bool Button(const char *id, const std::string &text, float width = 0.0f)	Stable
+overlay.h	fn	zsdk::tab::Clipped	-	bool Clipped(const char *id, const std::string &text, float width)	Stable
+overlay.h	fn	zsdk::tab::Heading	-	void Heading(const std::string &text)	Stable
+overlay.h	fn	zsdk::tab::KeyField	-	int KeyField(Overlay &o, const char *id, keys::Chord &chord, std::span<const keys::Chord> others, const KeyTexts &texts, float width)	Stable
+overlay.h	fn	zsdk::tab::Capturing	-	bool Capturing(const char *id)	Stable
+overlay.h	fn	zsdk::tab::Release	-	void Release()	Stable
+overlay.h	fn	zsdk::tab::Diagnostics	-	void Diagnostics(Overlay &o, const DiagTexts &texts = {})	Stable
+overlay.h	fn	zsdk::tab::Report	-	std::string Report(Overlay &o, const DiagTexts &texts = {})	Stable
+overlay.h	namespace	zsdk::toast	-	-	Stable
+overlay.h	fn	zsdk::toast::Draw	-	void Draw(Overlay &o, float lane, std::string (*words)(const Item &, lang::Lang), uint32_t (*tone)(const Item &))	Stable
+paint.h	namespace	reshade::api	-	-	Stable
+paint.h	namespace	zsdk::paint	-	-	Stable
+paint.h	type	zsdk::paint::Ink	-	struct Ink	Stable
+paint.h	field	zsdk::paint::Ink::glass	0	ImU32 glass	Stable
+paint.h	field	zsdk::paint::Ink::edge	1	ImU32 edge	Stable
+paint.h	field	zsdk::paint::Ink::hair	2	ImU32 hair	Stable
+paint.h	field	zsdk::paint::Ink::amber	3	ImU32 amber	Stable
+paint.h	field	zsdk::paint::Ink::wash	4	ImU32 wash	Stable
+paint.h	field	zsdk::paint::Ink::paper	5	ImU32 paper	Stable
+paint.h	field	zsdk::paint::Ink::text	6	ImU32 text	Stable
+paint.h	field	zsdk::paint::Ink::warm	7	ImU32 warm	Stable
+paint.h	field	zsdk::paint::Ink::dim	8	ImU32 dim	Stable
+paint.h	field	zsdk::paint::Ink::faint	9	ImU32 faint	Stable
+paint.h	field	zsdk::paint::Ink::tile	10	ImU32 tile	Stable
+paint.h	field	zsdk::paint::Ink::dark	11	ImU32 dark	Stable
+paint.h	field	zsdk::paint::Ink::foe	12	ImU32 foe	Stable
+paint.h	field	zsdk::paint::Ink::veiled	13	ImU32 veiled	Stable
+paint.h	field	zsdk::paint::Ink::life	14	ImU32 life	Stable
+paint.h	field	zsdk::paint::Ink::soot	15	ImU32 soot	Stable
+paint.h	field	zsdk::paint::Ink::glow	16	ImU32 glow	Stable
+paint.h	field	zsdk::paint::Ink::rail	17	ImU32 rail	Stable
+paint.h	fn	zsdk::paint::ink	-	const Ink &ink()	Stable
+paint.h	fn	zsdk::paint::terminal	-	const Ink &terminal()	Stable
+paint.h	fn	zsdk::paint::Theme	-	void Theme(const Ink *palette)	Stable
+paint.h	fn	zsdk::paint::Serve	-	void Serve(reshade::api::device *device)	Stable
+paint.h	fn	zsdk::paint::Drop	-	void Drop(reshade::api::device *device)	Stable
+paint.h	fn	zsdk::paint::Cyrillic	-	bool Cyrillic()	Stable
+paint.h	fn	zsdk::paint::Box	-	void Box(ImDrawList *sheet, const ImVec2 &a, const ImVec2 &b, ImU32 tone)	Stable
+paint.h	fn	zsdk::paint::Frame	-	void Frame(ImDrawList *sheet, const ImVec2 &a, const ImVec2 &b, ImU32 tone, float thick = 1.0f)	Stable
+paint.h	fn	zsdk::paint::Rule	-	void Rule(ImDrawList *sheet, const ImVec2 &a, float span, ImU32 tone, float thick = 1.0f)	Stable
+paint.h	fn	zsdk::paint::Grain	-	void Grain(ImDrawList *sheet, const ImVec2 &a, const ImVec2 &b, float step, ImU32 tone)	Stable
+paint.h	fn	zsdk::paint::Corners	-	void Corners(ImDrawList *sheet, const ImVec2 &a, const ImVec2 &b, ImU32 tone, float len, float thick)	Stable
+paint.h	fn	zsdk::paint::Bracket	-	void Bracket(ImDrawList *sheet, const ImVec2 &a, const ImVec2 &b, ImU32 tone, float len, float thick)	Stable
+paint.h	fn	zsdk::paint::Span	-	float Span(float size, const char *line)	Stable
+paint.h	fn	zsdk::paint::Text	-	void Text(ImDrawList *sheet, const ImVec2 &at, float size, ImU32 tone, const char *line)	Stable
+paint.h	fn	zsdk::paint::Mid	-	void Mid(ImDrawList *sheet, const ImVec2 &at, float size, ImU32 tone, const char *line)	Stable
+paint.h	fn	zsdk::paint::Caps	-	float Caps(ImDrawList *sheet, const ImVec2 &at, float size, ImU32 tone, const char *line, float gap)	Stable
+paint.h	fn	zsdk::paint::CapsSpan	-	float CapsSpan(float size, const char *line, float gap)	Stable
+paint.h	fn	zsdk::paint::Probe	-	void Probe(void (*sink)(float pixels))	Stable
+paths.h	namespace	zsdk::paths	-	-	Stable
+paths.h	type	zsdk::paths::Roots	-	struct Roots	Stable
+paths.h	field	zsdk::paths::Roots::exe	0	std::filesystem::path exe	Stable
+paths.h	field	zsdk::paths::Roots::local	1	std::filesystem::path local	Stable
+paths.h	fn	zsdk::paths::Current	-	Roots Current()	Stable
+paths.h	fn	zsdk::paths::GameRoot	-	std::filesystem::path GameRoot(const Roots &roots)	Stable
+paths.h	fn	zsdk::paths::Mods	-	std::filesystem::path Mods(const Roots &roots)	Stable
+paths.h	fn	zsdk::paths::Saved	-	std::filesystem::path Saved(const Roots &roots)	Stable
+paths.h	fn	zsdk::paths::Logs	-	std::filesystem::path Logs(const Roots &roots)	Stable
+paths.h	fn	zsdk::paths::AppliedSettings	-	std::filesystem::path AppliedSettings(const Roots &roots)	Stable
+paths.h	fn	zsdk::paths::SteamManifest	-	std::filesystem::path SteamManifest(const Roots &roots)	Stable
+paths.h	fn	zsdk::paths::SaveGamesData	-	std::vector<std::filesystem::path> SaveGamesData(const Roots &roots)	Stable
+paths.h	fn	zsdk::paths::PlayerSave	-	bool PlayerSave(const std::filesystem::path &file)	Stable
+paths.h	fn	zsdk::paths::GameRoot	-	std::filesystem::path GameRoot()	Stable
+paths.h	fn	zsdk::paths::Mods	-	std::filesystem::path Mods()	Stable
+paths.h	fn	zsdk::paths::Saved	-	std::filesystem::path Saved()	Stable
+paths.h	fn	zsdk::paths::Logs	-	std::filesystem::path Logs()	Stable
+paths.h	fn	zsdk::paths::AppliedSettings	-	std::filesystem::path AppliedSettings()	Stable
+paths.h	fn	zsdk::paths::SteamManifest	-	std::filesystem::path SteamManifest()	Stable
+paths.h	fn	zsdk::paths::SaveGamesData	-	std::vector<std::filesystem::path> SaveGamesData()	Stable
+policy.h	namespace	zsdk	-	-	Stable
+policy.h	enum	zsdk::Marks	-	enum class Marks : uint8_t	Legacy
+policy.h	value	zsdk::Marks::All	0	All	Legacy
+policy.h	value	zsdk::Marks::Flagged	1	Flagged	Legacy
+policy.h	enum	zsdk::Halt	-	enum class Halt : uint8_t	Stable
+policy.h	value	zsdk::Halt::Key	0	Key	Stable
+policy.h	value	zsdk::Halt::Session	1	Session	Stable
+policy.h	enum	zsdk::GoneFlags	-	enum class GoneFlags : uint8_t	Legacy
+policy.h	value	zsdk::GoneFlags::Strict	0	Strict	Legacy
+policy.h	value	zsdk::GoneFlags::Legacy	1	Legacy	Legacy
+policy.h	enum	zsdk::Spelling	-	enum class Spelling : uint8_t	Legacy
+policy.h	value	zsdk::Spelling::Tolerant	0	Tolerant	Legacy
+policy.h	value	zsdk::Spelling::Strict	1	Strict	Legacy
+policy.h	enum	zsdk::CensusMode	-	enum class CensusMode : uint8_t	Legacy
+policy.h	value	zsdk::CensusMode::Interval	0	Interval	Legacy
+policy.h	value	zsdk::CensusMode::OnDemand	1	OnDemand	Legacy
+policy.h	enum	zsdk::Knock	-	enum class Knock : uint8_t	Legacy
+policy.h	value	zsdk::Knock::BusyIdle	0	BusyIdle	Legacy
+policy.h	value	zsdk::Knock::Fixed	1	Fixed	Legacy
+policy.h	value	zsdk::Knock::Configured	2	Configured	Legacy
+policy.h	enum	zsdk::WireRetry	-	enum class WireRetry : uint8_t	Legacy
+policy.h	value	zsdk::WireRetry::Backoff	0	Backoff	Legacy
+policy.h	value	zsdk::WireRetry::Fixed	1	Fixed	Legacy
+policy.h	enum	zsdk::FileThread	-	enum class FileThread : uint8_t	Stable
+policy.h	value	zsdk::FileThread::Render	0	Render	Stable
+policy.h	enum	zsdk::ModRule	-	enum class ModRule : uint8_t	Stable
+policy.h	value	zsdk::ModRule::Alt	0	Alt	Stable
+policy.h	value	zsdk::ModRule::Exact	1	Exact	Stable
+policy.h	type	zsdk::Policy	-	struct Policy	Stable
+policy.h	field	zsdk::Policy::marks	0	Marks marks	Legacy
+policy.h	field	zsdk::Policy::strictMarks	1	bool strictMarks	Stable
+policy.h	field	zsdk::Policy::verifiedOnly	2	bool verifiedOnly	Stable
+policy.h	field	zsdk::Policy::halt	3	Halt halt	Stable
+policy.h	field	zsdk::Policy::haltOnSeh	4	bool haltOnSeh	Stable
+policy.h	field	zsdk::Policy::watchKept	5	uint32_t watchKept	Stable
+policy.h	field	zsdk::Policy::gone	6	GoneFlags gone	Legacy
+policy.h	field	zsdk::Policy::spelling	7	Spelling spelling	Legacy
+policy.h	field	zsdk::Policy::widen	8	bool widen	Legacy
+policy.h	field	zsdk::Policy::census	9	CensusMode census	Legacy
+policy.h	field	zsdk::Policy::knock	10	Knock knock	Legacy
+policy.h	field	zsdk::Policy::knockMs	11	uint32_t knockMs	Legacy
+policy.h	field	zsdk::Policy::idleMs	12	uint32_t idleMs	Legacy
+policy.h	field	zsdk::Policy::wire	13	WireRetry wire	Legacy
+policy.h	field	zsdk::Policy::wireMs	14	uint32_t wireMs	Legacy
+policy.h	field	zsdk::Policy::files	15	FileThread files	Stable
+policy.h	field	zsdk::Policy::mods	16	ModRule mods	Stable
+policy.h	fn	zsdk::Policy::operator==	-	friend bool operator==(const Policy &, const Policy &) = default	Stable
+policy.h	fn	zsdk::Legacy	-	bool Legacy(const Policy &policy)	Stable
+policy.h	fn	zsdk::LegacyText	-	std::string LegacyText(const Policy &policy)	Stable
+registry.h	namespace	zsdk::registry	-	-	Provisional
+registry.h	type	zsdk::registry::Row	-	struct Row	Provisional
+registry.h	field	zsdk::registry::Row::id	0	const char *id	Provisional
+registry.h	field	zsdk::registry::Row::tag	1	const char *tag	Provisional
+registry.h	field	zsdk::registry::Row::lane	2	float lane	Provisional
+registry.h	field	zsdk::registry::Row::keys	3	const char *keys	Provisional
+registry.h	var	zsdk::registry::kSpareLane	-	inline constexpr float kSpareLane	Provisional
+registry.h	fn	zsdk::registry::Rows	-	std::span<const Row> Rows()	Provisional
+registry.h	fn	zsdk::registry::Find	-	const Row *Find(std::string_view id)	Provisional
+registry.h	fn	zsdk::registry::Lane	-	float Lane(std::string_view id, float fallback)	Provisional
+report.h	namespace	zsdk::report	-	-	Stable
+report.h	var	zsdk::report::kLogLines	-	inline constexpr size_t kLogLines	Stable
+report.h	var	zsdk::report::kTailBytes	-	inline constexpr size_t kTailBytes	Stable
+report.h	fn	zsdk::report::Version	-	std::string Version(void *module)	Stable
+report.h	fn	zsdk::report::Text	-	std::string Text(void *reshade)	Stable
+report.h	fn	zsdk::report::File	-	std::filesystem::path File()	Stable
+report.h	fn	zsdk::report::Save	-	bool Save(const std::string &text)	Stable
+shell.h	macro	ZSDK_ADDON	-	-	Stable
+shell.h	namespace	zsdk::shell	-	-	Stable
+shell.h	fn	zsdk::shell::Main	-	BOOL Main(HMODULE module, DWORD reason, LPVOID reserved, const Hooks &hooks)	Stable
+shell.h	fn	zsdk::shell::Module	-	void *Module()	Stable
+shell.h	fn	zsdk::shell::Stopping	-	bool Stopping()	Stable
+shell.h	fn	zsdk::shell::Ready	-	bool Ready()	Stable
+shell.h	fn	zsdk::shell::Exiting	-	bool Exiting()	Stable
+test/addon.h	namespace	addon	-	-	Stable
+test/addon.h	type	addon::Tree	-	struct Tree	Stable
+test/addon.h	field	addon::Tree::root	0	std::filesystem::path root	Stable
+test/addon.h	field	addon::Tree::sdk	1	std::filesystem::path sdk	Stable
+test/addon.h	field	addon::Tree::cfg	2	std::map<std::string, std::string> cfg	Stable
+test/addon.h	field	addon::Tree::present	3	std::vector<std::filesystem::path> present	Stable
+test/addon.h	field	addon::Tree::overlay	4	std::vector<std::filesystem::path> overlay	Stable
+test/addon.h	field	addon::Tree::entry	5	std::filesystem::path entry	Stable
+test/addon.h	field	addon::Tree::tests	6	std::vector<std::filesystem::path> tests	Stable
+test/addon.h	fn	addon::Under	-	inline bool Under(const std::filesystem::path &file, const std::filesystem::path &dir)	Stable
+test/addon.h	fn	addon::Load	-	inline Tree Load()	Stable
+test/addon.h	fn	addon::Allowed	-	inline std::set<std::string> Allowed(const Tree &t, const std::string &key)	Stable
+test/addon.h	fn	addon::Rel	-	inline std::string Rel(const Tree &t, const std::filesystem::path &file)	Stable
+test/addon.h	type	addon::Declared	-	struct Declared	Stable
+test/addon.h	field	addon::Declared::id	0	std::string id	Stable
+test/addon.h	field	addon::Declared::name	1	std::string name	Stable
+test/addon.h	field	addon::Declared::file	2	std::string file	Stable
+test/addon.h	fn	addon::GuardSets	-	inline std::vector<Declared> GuardSets(const std::string &body)	Stable
+test/addon.h	fn	addon::GuardSets	-	inline std::vector<Declared> GuardSets(const Tree &t)	Stable
+test/check.h	namespace	check	-	-	Stable
+test/check.h	fn	check::Failures	-	inline int &Failures()	Stable
+test/check.h	fn	check::Count	-	inline int &Count()	Stable
+test/check.h	fn	check::Warnings	-	inline int &Warnings()	Stable
+test/check.h	fn	check::That	-	inline void That(bool ok, const std::string &what)	Stable
+test/check.h	fn	check::Warn	-	inline void Warn(const std::string &what)	Stable
+test/check.h	fn	check::Skip	-	inline void Skip(const std::string &what)	Stable
+test/check.h	fn	check::Finish	-	inline int Finish(const char *name)	Stable
+test/scan.h	namespace	scan	-	-	Stable
+test/scan.h	type	scan::Lexed	-	struct Lexed	Stable
+test/scan.h	field	scan::Lexed::literals	0	std::vector<std::string> literals	Stable
+test/scan.h	field	scan::Lexed::words	1	std::set<std::string> words	Stable
+test/scan.h	field	scan::Lexed::code	2	std::string code	Stable
+test/scan.h	field	scan::Lexed::comments	3	int comments	Stable
+test/scan.h	field	scan::Lexed::firstComment	4	size_t firstComment	Stable
+test/scan.h	field	scan::Lexed::closed	5	bool closed	Stable
+test/scan.h	type	scan::Function	-	struct Function	Stable
+test/scan.h	field	scan::Function::name	0	std::string name	Stable
+test/scan.h	field	scan::Function::at	1	size_t at	Stable
+test/scan.h	field	scan::Function::body	2	std::string body	Stable
+test/scan.h	fn	scan::Body	-	inline std::string Body(const std::filesystem::path &file)	Stable
+test/scan.h	fn	scan::Ident	-	inline bool Ident(char c)	Stable
+test/scan.h	fn	scan::LineOf	-	inline size_t LineOf(const std::string &body, size_t at)	Stable
+test/scan.h	fn	scan::Lex	-	inline Lexed Lex(const std::string &body)	Stable
+test/scan.h	fn	scan::Text	-	inline std::string Text(const std::filesystem::path &path)	Stable
+test/scan.h	fn	scan::Generic	-	inline std::string Generic(const std::filesystem::path &path)	Stable
+test/scan.h	fn	scan::Files	-	inline std::vector<std::filesystem::path> Files(const std::filesystem::path &dir, const std::set<std::string> &kinds, bool deep)	Stable
+test/scan.h	fn	scan::Dirs	-	inline std::vector<std::filesystem::path> Dirs(const std::filesystem::path &dir)	Stable
+test/scan.h	fn	scan::Wide	-	inline std::wstring Wide(const char *name)	Stable
+test/scan.h	fn	scan::Env	-	inline std::string Env(const char *name, const std::string &fallback = {})	Stable
+test/scan.h	fn	scan::EnvPath	-	inline std::filesystem::path EnvPath(const char *name, const std::filesystem::path &fallback = {})	Stable
+test/scan.h	fn	scan::AddonRoot	-	inline std::filesystem::path AddonRoot()	Stable
+test/scan.h	fn	scan::SdkRoot	-	inline std::filesystem::path SdkRoot()	Stable
+test/scan.h	fn	scan::Trim	-	inline std::string Trim(const std::string &raw)	Stable
+test/scan.h	fn	scan::List	-	inline std::vector<std::string> List(const std::string &csv)	Stable
+test/scan.h	fn	scan::Config	-	inline std::map<std::string, std::string> Config(const std::filesystem::path &file)	Stable
+test/scan.h	fn	scan::Close	-	inline size_t Close(const std::string &code, size_t open)	Stable
+test/scan.h	fn	scan::Before	-	inline std::string Before(const std::string &code, size_t at)	Stable
+test/scan.h	fn	scan::Functions	-	inline std::vector<Function> Functions(const std::string &code)	Stable
+test/scan.h	fn	scan::Calls	-	inline std::set<std::string> Calls(const std::string &code)	Stable
+test/scan.h	fn	scan::Count	-	inline size_t Count(const std::string &text, const std::string &what)	Stable
+test/scan.h	fn	scan::Tokens	-	inline std::vector<std::string> Tokens(const std::string &code)	Stable
+test/scan.h	type	scan::Piece	-	struct Piece	Stable
+test/scan.h	field	scan::Piece::text	0	std::string text	Stable
+test/scan.h	field	scan::Piece::prefix	1	bool prefix	Stable
+test/scan.h	fn	scan::Rule	-	inline std::vector<Piece> Rule(const std::string &rule)	Stable
+test/scan.h	fn	scan::Seek	-	inline size_t Seek(const std::vector<std::string> &tokens, const std::string &rule)	Stable
+test/scan.h	fn	scan::Uses	-	inline bool Uses(const std::vector<std::string> &tokens, const std::string &rule)	Stable
+test/scan.h	type	scan::Tick	-	struct Tick	Stable
+test/scan.h	field	scan::Tick::line	0	size_t line	Stable
+test/scan.h	field	scan::Tick::text	1	std::string text	Stable
+test/scan.h	fn	scan::Ticks	-	inline std::vector<Tick> Ticks(const std::string &code)	Stable
+text.h	namespace	zsdk::text	-	-	Stable
+text.h	fn	zsdk::text::Trim	-	std::string Trim(std::string_view raw)	Stable
+text.h	fn	zsdk::text::Split	-	std::vector<std::string> Split(std::string_view line, char mark)	Stable
+text.h	fn	zsdk::text::Tokens	-	std::vector<std::string> Tokens(std::string_view line)	Stable
+text.h	fn	zsdk::text::Lines	-	std::vector<std::string> Lines(const std::string &body)	Stable
+text.h	fn	zsdk::text::Wide	-	std::wstring Wide(std::string_view utf8)	Stable
+text.h	fn	zsdk::text::Narrow	-	std::string Narrow(std::wstring_view wide)	Stable
+text.h	fn	zsdk::text::Fold	-	uint32_t Fold(uint32_t point)	Stable
+text.h	fn	zsdk::text::Raise	-	uint32_t Raise(uint32_t point)	Stable
+text.h	fn	zsdk::text::Lower	-	std::string Lower(std::string_view utf8)	Stable
+text.h	fn	zsdk::text::Upper	-	std::string Upper(std::string_view utf8)	Stable
+text.h	fn	zsdk::text::Latin	-	std::string Latin(std::string_view utf8)	Stable
+text.h	fn	zsdk::text::Cyrillic	-	bool Cyrillic(std::string_view utf8)	Stable
+text.h	fn	zsdk::text::Points	-	std::vector<uint32_t> Points(std::string_view utf8)	Stable
+text.h	fn	zsdk::text::Starts	-	bool Starts(std::string_view text, std::string_view head)	Stable
+text.h	fn	zsdk::text::Ends	-	bool Ends(std::string_view text, std::string_view tail)	Stable
+text.h	fn	zsdk::text::Same	-	bool Same(std::string_view left, std::string_view right)	Stable
+text.h	fn	zsdk::text::Color	-	bool Color(std::string_view token, uint32_t &argb)	Stable
+text.h	fn	zsdk::text::Format	-	std::string Format(const char *shape, ...)	Stable
+text.h	fn	zsdk::text::Read	-	std::string Read(const std::string &path)	Stable
+text.h	fn	zsdk::text::Write	-	bool Write(const std::string &path, const std::string &body)	Stable
+thread.h	namespace	zsdk	-	-	Stable
+thread.h	enum	zsdk::Phase	-	enum class Phase : uint8_t	Stable
+thread.h	value	zsdk::Phase::Off	0	Off	Stable
+thread.h	value	zsdk::Phase::Hooking	1	Hooking	Stable
+thread.h	value	zsdk::Phase::Binding	2	Binding	Stable
+thread.h	value	zsdk::Phase::Wiring	3	Wiring	Stable
+thread.h	value	zsdk::Phase::Waiting	4	Waiting	Stable
+thread.h	value	zsdk::Phase::Ready	5	Ready	Stable
+thread.h	value	zsdk::Phase::Failed	6	Failed	Stable
+thread.h	value	zsdk::Phase::Halted	7	Halted	Stable
+thread.h	value	zsdk::Phase::Lost	8	Lost	Stable
+thread.h	value	zsdk::Phase::Count	9	Count	Stable
+thread.h	namespace	zsdk::thread	-	-	Stable
+thread.h	type	zsdk::thread::Counters	-	struct Counters	Stable
+thread.h	field	zsdk::thread::Counters::posted	0	uint64_t posted	Stable
+thread.h	field	zsdk::thread::Counters::seen	1	uint64_t seen	Stable
+thread.h	field	zsdk::thread::Counters::ticked	2	uint64_t ticked	Stable
+thread.h	field	zsdk::thread::Counters::pumpAt	3	uint64_t pumpAt	Stable
+thread.h	field	zsdk::thread::Counters::turns	4	uint64_t turns	Stable
+thread.h	field	zsdk::thread::Counters::wires	5	int wires	Stable
+thread.h	field	zsdk::thread::Counters::wireMs	6	double wireMs	Stable
+thread.h	fn	zsdk::thread::OnGame	-	bool OnGame()	Stable
+thread.h	fn	zsdk::thread::Started	-	bool Started()	Stable
+thread.h	fn	zsdk::thread::Hooked	-	bool Hooked()	Stable
+thread.h	fn	zsdk::thread::Bound	-	bool Bound()	Stable
+thread.h	fn	zsdk::thread::Wired	-	bool Wired()	Stable
+thread.h	fn	zsdk::thread::Halted	-	bool Halted()	Stable
+thread.h	fn	zsdk::thread::Stopping	-	bool Stopping()	Stable
+thread.h	fn	zsdk::thread::Overlaid	-	bool Overlaid()	Stable
+thread.h	fn	zsdk::thread::Wake	-	void Wake()	Stable
+thread.h	fn	zsdk::thread::Ask	-	void Ask(int order)	Stable
+thread.h	fn	zsdk::thread::Knock	-	void Knock(uint32_t ms)	Stable
+thread.h	fn	zsdk::thread::LastMs	-	double LastMs()	Stable
+thread.h	fn	zsdk::thread::WorstMs	-	double WorstMs()	Stable
+thread.h	fn	zsdk::thread::LastPumpAt	-	uint64_t LastPumpAt()	Stable
+thread.h	fn	zsdk::thread::PumpAlive	-	bool PumpAlive()	Stable
+thread.h	fn	zsdk::thread::Count	-	Counters Count()	Stable
+thread.h	fn	zsdk::thread::State	-	Phase State(bool stable)	Stable
+toast.h	namespace	zsdk::toast	-	-	Stable
+toast.h	var	zsdk::toast::kLifeMs	-	inline constexpr uint64_t kLifeMs	Stable
+toast.h	var	zsdk::toast::kFadeMs	-	inline constexpr uint64_t kFadeMs	Stable
+toast.h	var	zsdk::toast::kShown	-	inline constexpr size_t kShown	Stable
+toast.h	var	zsdk::toast::kKept	-	inline constexpr size_t kKept	Stable
+toast.h	var	zsdk::toast::kUnsupported	-	inline constexpr int kUnsupported	Stable
+toast.h	type	zsdk::toast::Item	-	struct Item	Stable
+toast.h	field	zsdk::toast::Item::kind	0	int kind	Stable
+toast.h	field	zsdk::toast::Item::detail	1	std::string detail	Stable
+toast.h	field	zsdk::toast::Item::args	2	std::vector<std::string> args	Stable
+toast.h	field	zsdk::toast::Item::born	3	uint64_t born	Stable
+toast.h	fn	zsdk::toast::Push	-	void Push(int kind, const std::string &detail, const std::vector<std::string> &args, bool replaceKind)	Stable
+toast.h	fn	zsdk::toast::Live	-	std::vector<Item> Live(uint64_t now)	Stable
+toast.h	fn	zsdk::toast::Reset	-	void Reset()	Stable
+toast.h	fn	zsdk::toast::Focused	-	bool Focused()	Stable
+ue.h	namespace	zsdk::ue	-	-	Stable
+ue.h	var	zsdk::ue::kIndexAt	-	inline constexpr int32_t kIndexAt	Stable
+ue.h	var	zsdk::ue::kClassAt	-	inline constexpr int32_t kClassAt	Stable
+ue.h	var	zsdk::ue::kNameAt	-	inline constexpr int32_t kNameAt	Stable
+ue.h	var	zsdk::ue::kOuterAt	-	inline constexpr int32_t kOuterAt	Stable
+ue.h	var	zsdk::ue::kSuperAt	-	inline constexpr int32_t kSuperAt	Stable
+ue.h	var	zsdk::ue::kGoneStrict	-	inline constexpr uint32_t kGoneStrict	Stable
+ue.h	var	zsdk::ue::kGoneLegacy	-	inline constexpr uint32_t kGoneLegacy	Stable
+ue.h	var	zsdk::ue::kObjectDoomed	-	inline constexpr uint32_t kObjectDoomed	Stable
+ue.h	var	zsdk::ue::kItemFlagsAt	-	inline constexpr int32_t kItemFlagsAt	Stable
+ue.h	var	zsdk::ue::kItemClusterAt	-	inline constexpr int32_t kItemClusterAt	Stable
+ue.h	var	zsdk::ue::kItemGarbage	-	inline constexpr uint32_t kItemGarbage	Stable
+ue.h	var	zsdk::ue::kItemUnreachable	-	inline constexpr uint32_t kItemUnreachable	Stable
+ue.h	var	zsdk::ue::kLendCap	-	inline constexpr size_t kLendCap	Stable
+ue.h	type	zsdk::ue::Lent	-	struct Lent	Stable
+ue.h	field	zsdk::ue::Lent::data	0	const wchar_t *data	Stable
+ue.h	field	zsdk::ue::Lent::num	1	int32_t num	Stable
+ue.h	field	zsdk::ue::Lent::max	2	int32_t max	Stable
+ue.h	fn	zsdk::ue::Lend	-	inline Lent Lend(const std::wstring &text)	Stable
+ue.h	fn	zsdk::ue::Lend	-	inline Lent Lend(const wchar_t *text)	Stable
+ue.h	fn	zsdk::ue::Lend	-	Lent Lend(const std::wstring &&text) = delete	Stable
+ue.h	type	zsdk::ue::Param	-	struct Param	Stable
+ue.h	field	zsdk::ue::Param::name	0	std::string name	Stable
+ue.h	field	zsdk::ue::Param::type	1	std::string type	Stable
+ue.h	field	zsdk::ue::Param::field	2	const void *field	Stable
+ue.h	field	zsdk::ue::Param::at	3	int32_t at	Stable
+ue.h	field	zsdk::ue::Param::size	4	int32_t size	Stable
+ue.h	field	zsdk::ue::Param::flags	5	uint64_t flags	Stable
+ue.h	type	zsdk::ue::Sign	-	struct Sign	Stable
+ue.h	field	zsdk::ue::Sign::owner	0	std::string owner	Stable
+ue.h	field	zsdk::ue::Sign::bytes	1	int32_t bytes	Stable
+ue.h	field	zsdk::ue::Sign::params	2	std::vector<Param> params	Stable
+ue.h	type	zsdk::ue::Pick	-	struct Pick	Stable
+ue.h	field	zsdk::ue::Pick::name	0	std::string name	Stable
+ue.h	field	zsdk::ue::Pick::value	1	int64_t value	Stable
+ue.h	type	zsdk::ue::Mark	-	struct Mark	Stable
+ue.h	field	zsdk::ue::Mark::actor	0	const void *actor	Stable
+ue.h	field	zsdk::ue::Mark::type	1	const void *type	Stable
+ue.h	field	zsdk::ue::Mark::index	2	int32_t index	Stable
+ue.h	field	zsdk::ue::Mark::name	3	uint64_t name	Stable
+ue.h	field	zsdk::ue::Mark::serial	4	int32_t serial	Stable
+ue.h	fn	zsdk::ue::Ready	-	bool Ready()	Stable
+ue.h	fn	zsdk::ue::Bound	-	bool Bound()	Stable
+ue.h	fn	zsdk::ue::Copy	-	bool Copy(const void *at, void *into, size_t bytes)	Stable
+ue.h	fn	zsdk::ue::Read	-	template<class T> bool Read(uintptr_t at, T &out)	Stable
+ue.h	fn	zsdk::ue::Held	-	bool Held(const void *spot, size_t bytes)	Stable
+ue.h	fn	zsdk::ue::Grab	-	const void *Grab(const void *thing, int32_t at)	Stable
+ue.h	fn	zsdk::ue::Total	-	int32_t Total()	Stable
+ue.h	fn	zsdk::ue::Stride	-	int32_t Stride()	Stable
+ue.h	fn	zsdk::ue::Item	-	const uint8_t *Item(int32_t index)	Stable
+ue.h	fn	zsdk::ue::At	-	const void *At(int32_t index)	Stable
+ue.h	fn	zsdk::ue::Flags	-	uint32_t Flags(const void *thing)	Stable
+ue.h	fn	zsdk::ue::ClassOf	-	const void *ClassOf(const void *thing)	Stable
+ue.h	fn	zsdk::ue::OuterOf	-	const void *OuterOf(const void *thing)	Stable
+ue.h	fn	zsdk::ue::Label	-	std::string Label(const void *thing)	Stable
+ue.h	fn	zsdk::ue::Path	-	std::string Path(const void *thing)	Stable
+ue.h	fn	zsdk::ue::Word	-	std::string Word(uint32_t slot)	Stable
+ue.h	fn	zsdk::ue::Kin	-	bool Kin(const void *type, const void *base)	Stable
+ue.h	fn	zsdk::ue::Inherits	-	bool Inherits(const void *type, const char *name)	Stable
+ue.h	fn	zsdk::ue::Standing	-	bool Standing(const void *thing, const void *type)	Stable
+ue.h	fn	zsdk::ue::Here	-	bool Here(const void *thing, const void *type = nullptr)	Stable
+ue.h	fn	zsdk::ue::Gone	-	bool Gone(const void *thing)	Stable
+ue.h	fn	zsdk::ue::Doomed	-	bool Doomed(const void *thing)	Stable
+ue.h	fn	zsdk::ue::Look	-	std::string Look(const void *thing)	Stable
+ue.h	fn	zsdk::ue::CopyText	-	std::wstring CopyText(const void *at)	Stable
+ue.h	fn	zsdk::ue::NameText	-	std::string NameText(uint32_t index, uint32_t number)	Stable
+ue.h	fn	zsdk::ue::Serial	-	int32_t Serial(int32_t index)	Stable
+ue.h	fn	zsdk::ue::Seal	-	Mark Seal(const void *thing)	Stable
+ue.h	fn	zsdk::ue::Ours	-	bool Ours(const Mark &mark)	Stable
+ue.h	fn	zsdk::ue::PropertyOffset	-	int32_t PropertyOffset(const void *type, const char *field)	Stable
+ue.h	fn	zsdk::ue::Bulk	-	int32_t Bulk(const void *type)	Stable
+ue.h	fn	zsdk::ue::FindClass	-	const void *FindClass(const char *name)	Stable
+ue.h	fn	zsdk::ue::FindLive	-	const void *FindLive(const char *baseClass)	Stable
+ue.h	fn	zsdk::ue::Host	-	const void *Host(const void *type)	Stable
+ue.h	fn	zsdk::ue::Analyze	-	bool Analyze(const void *function, Sign &out)	Stable
+ue.h	fn	zsdk::ue::Function	-	const void *Function(const char *owner, const char *name)	Stable
+ue.h	fn	zsdk::ue::Functions	-	std::vector<const void *> Functions(const char *name)	Stable
+ue.h	fn	zsdk::ue::Choices	-	bool Choices(const Param &one, std::vector<Pick> &out)	Stable
+ue.h	fn	zsdk::ue::Choose	-	bool Choose(const std::vector<Pick> &picks, const std::string &word, int64_t &out)	Stable
+verbs.h	namespace	zsdk::verbs	-	-	Stable
+verbs.h	enum	zsdk::verbs::Mark	-	enum class Mark : uint8_t	Stable
+verbs.h	value	zsdk::verbs::Mark::Auto	0	Auto	Stable
+verbs.h	value	zsdk::verbs::Mark::Risky	1	Risky	Stable
+verbs.h	enum	zsdk::verbs::Check	-	enum class Check : uint8_t	Stable
+verbs.h	value	zsdk::verbs::Check::Unknown	0	Unknown	Stable
+verbs.h	value	zsdk::verbs::Check::Ok	1	Ok	Stable
+verbs.h	value	zsdk::verbs::Check::Bad	2	Bad	Stable
+verbs.h	type	zsdk::verbs::Want	-	struct Want	Stable
+verbs.h	field	zsdk::verbs::Want::name	0	const char *name	Stable
+verbs.h	field	zsdk::verbs::Want::types	1	const char *types	Stable
+verbs.h	field	zsdk::verbs::Want::at	2	int32_t at	Stable
+verbs.h	field	zsdk::verbs::Want::size	3	int32_t size	Stable
+verbs.h	type	zsdk::verbs::Spec	-	struct Spec	Stable
+verbs.h	field	zsdk::verbs::Spec::owner	0	const char *owner	Stable
+verbs.h	field	zsdk::verbs::Spec::name	1	const char *name	Stable
+verbs.h	field	zsdk::verbs::Spec::required	2	bool required	Stable
+verbs.h	field	zsdk::verbs::Spec::params	3	Want params[12]	Stable
+verbs.h	field	zsdk::verbs::Spec::mark	4	Mark mark	Stable
+verbs.h	field	zsdk::verbs::Spec::count	5	int16_t count	Stable
+verbs.h	field	zsdk::verbs::Spec::bytes	6	int32_t bytes	Stable
+verbs.h	type	zsdk::verbs::Report	-	struct Report	Stable
+verbs.h	field	zsdk::verbs::Report::requiredOk	0	int requiredOk	Stable
+verbs.h	field	zsdk::verbs::Report::requiredAll	1	int requiredAll	Stable
+verbs.h	field	zsdk::verbs::Report::optionalOk	2	int optionalOk	Stable
+verbs.h	field	zsdk::verbs::Report::optionalAll	3	int optionalAll	Stable
+verbs.h	field	zsdk::verbs::Report::missing	4	std::string missing	Stable
+verbs.h	field	zsdk::verbs::Report::coreReady	5	bool coreReady	Stable
+verbs.h	fn	zsdk::verbs::Same	-	constexpr bool Same(const char *a, const char *b)	Stable
+verbs.h	fn	zsdk::verbs::Counted	-	template<size_t N> constexpr int Counted(const Spec (&specs)[N], bool required)	Stable
+verbs.h	fn	zsdk::verbs::Key	-	std::string Key(const char *owner, const char *name)	Stable
+verbs.h	fn	zsdk::verbs::KeyOf	-	std::string KeyOf(const Spec &spec)	Stable
+verbs.h	fn	zsdk::verbs::TypeFits	-	bool TypeFits(const std::string &type, const char *types)	Stable
+verbs.h	fn	zsdk::verbs::Verify	-	Check Verify(const ue::Sign &sign, bool missing, bool found, const Spec &spec, bool tolerant, std::string &note, std::string &spelled)	Stable
+verbs.h	fn	zsdk::verbs::Prime	-	Report Prime(std::span<const Spec> specs)	Stable
+verbs.h	fn	zsdk::verbs::Last	-	Report Last()	Stable
+verbs.h	fn	zsdk::verbs::Ready	-	bool Ready(int verb)	Stable
+verbs.h	fn	zsdk::verbs::Note	-	std::string Note(int verb)	Stable
+verbs.h	fn	zsdk::verbs::Primed	-	bool Primed()	Stable
+verbs/common.h	namespace	zsdk::verbs	-	-	Stable
+verbs/common.h	fn	zsdk::verbs::Join	-	template<size_t A, size_t B> constexpr std::array<Spec, A + B> Join(const Spec (&a)[A], const Spec (&b)[B])	Stable
+verbs/common.h	fn	zsdk::verbs::Join	-	template<size_t A, size_t B> constexpr std::array<Spec, A + B> Join(const std::array<Spec, A> &a, const Spec (&b)[B])	Stable
+verbs/common.h	fn	zsdk::verbs::Counted	-	template<size_t N> constexpr int Counted(const std::array<Spec, N> &specs, bool required)	Stable
+verbs/common.h	fn	zsdk::verbs::Index	-	constexpr int Index(std::span<const Spec> specs, const char *owner, const char *name)	Stable
+verbs/common.h	fn	zsdk::verbs::Index	-	constexpr int Index(std::span<const Spec> specs, const char *name)	Stable
+verbs/common.h	namespace	zsdk::verbs::common	-	-	Stable
+verbs/common.h	var	zsdk::verbs::common::kObject	-	inline constexpr const char *kObject	Stable
+verbs/common.h	var	zsdk::verbs::common::kInt	-	inline constexpr const char *kInt	Stable
+verbs/common.h	var	zsdk::verbs::common::kFloat	-	inline constexpr const char *kFloat	Stable
+verbs/common.h	var	zsdk::verbs::common::kReal	-	inline constexpr const char *kReal	Stable
+verbs/common.h	var	zsdk::verbs::common::kFrame	-	inline constexpr const char *kFrame	Stable
+verbs/common.h	var	zsdk::verbs::common::kBool	-	inline constexpr const char *kBool	Stable
+verbs/common.h	var	zsdk::verbs::common::kStr	-	inline constexpr const char *kStr	Stable
+verbs/common.h	var	zsdk::verbs::common::kEnum	-	inline constexpr const char *kEnum	Stable
+verbs/common.h	var	zsdk::verbs::common::kStruct	-	inline constexpr const char *kStruct	Stable
+verbs/common.h	enum	zsdk::verbs::common::World	-	enum World : int	Stable
+verbs/common.h	value	zsdk::verbs::common::World::kPlayerController	0	kPlayerController	Stable
+verbs/common.h	value	zsdk::verbs::common::World::kPlayerPawn	1	kPlayerPawn	Stable
+verbs/common.h	value	zsdk::verbs::common::World::kCameraManager	2	kCameraManager	Stable
+verbs/common.h	value	zsdk::verbs::common::World::kTimeSeconds	3	kTimeSeconds	Stable
+verbs/common.h	value	zsdk::verbs::common::World::kGamePaused	4	kGamePaused	Stable
+verbs/common.h	value	zsdk::verbs::common::World::kFrameCount	5	kFrameCount	Stable
+verbs/common.h	value	zsdk::verbs::common::World::kWorldCount	6	kWorldCount	Stable
+verbs/common.h	var	zsdk::verbs::common::kWorld	-	inline constexpr Spec kWorld[kWorldCount]	Stable
+verbs/common.h	fn	zsdk::verbs::common::Plays	-	constexpr bool Plays(std::span<const Spec> specs, int verb, World role)	Stable
+verbs/common.h	var	zsdk::verbs::common::kStatics	-	inline constexpr const char *kStatics[]	Stable
+verbs/common.h	enum	zsdk::verbs::common::Screen	-	enum Screen : int	Provisional
+verbs/common.h	value	zsdk::verbs::common::Screen::kInCinematic	0	kInCinematic	Provisional
+verbs/common.h	value	zsdk::verbs::common::Screen::kInStaticDialog	1	kInStaticDialog	Provisional
+verbs/common.h	value	zsdk::verbs::common::Screen::kUsingPda	2	kUsingPda	Provisional
+verbs/common.h	value	zsdk::verbs::common::Screen::kUsingBackpack	3	kUsingBackpack	Provisional
+verbs/common.h	value	zsdk::verbs::common::Screen::kInInteraction	4	kInInteraction	Provisional
+verbs/common.h	value	zsdk::verbs::common::Screen::kScreenCount	5	kScreenCount	Provisional
+verbs/common.h	var	zsdk::verbs::common::kScreen	-	inline constexpr Spec kScreen[kScreenCount]	Provisional
+verbs/common.h	enum	zsdk::verbs::common::Console	-	enum Console : int	Stable
+verbs/common.h	value	zsdk::verbs::common::Console::kDestroyModel	0	kDestroyModel	Stable
+verbs/common.h	value	zsdk::verbs::common::Console::kNeedsValue	1	kNeedsValue	Stable
+verbs/common.h	value	zsdk::verbs::common::Console::kConsoleCount	2	kConsoleCount	Stable
+verbs/common.h	var	zsdk::verbs::common::kConsoleHost	-	inline constexpr const char *kConsoleHost	Stable
+verbs/common.h	var	zsdk::verbs::common::kConsole	-	inline constexpr Spec kConsole[kConsoleCount]	Stable
+version.h	macro	ZSDK_VERSION_MAJOR	-	-	Stable
+version.h	macro	ZSDK_VERSION_MINOR	-	-	Stable
+version.h	macro	ZSDK_VERSION_PATCH	-	-	Stable
+version.h	macro	ZSDK_TEXT	-	-	Stable
+version.h	macro	ZSDK_VERSION	-	-	Stable
+version.h	macro	ZSDK_VERSION_NUMBER	-	-	Stable
+version.h	macro	ZSDK_RESHADE_API	-	-	Stable
+version.h	macro	ZSDK_IMGUI_NUM	-	-	Stable
+world.h	namespace	zsdk::world	-	-	Stable
+world.h	type	zsdk::world::Grip	-	struct Grip	Stable
+world.h	field	zsdk::world::Grip::gi	0	const void *gi	Stable
+world.h	field	zsdk::world::Grip::giType	1	const void *giType	Stable
+world.h	field	zsdk::world::Grip::pilot	2	const void *pilot	Stable
+world.h	field	zsdk::world::Grip::body	3	const void *body	Stable
+world.h	field	zsdk::world::Grip::bodyType	4	const void *bodyType	Stable
+world.h	field	zsdk::world::Grip::lens	5	const void *lens	Stable
+world.h	field	zsdk::world::Grip::lensType	6	const void *lensType	Stable
+world.h	field	zsdk::world::Grip::world	7	const void *world	Stable
+world.h	field	zsdk::world::Grip::home	8	const void *home	Stable
+world.h	field	zsdk::world::Grip::worldType	9	const void *worldType	Stable
+world.h	field	zsdk::world::Grip::worldName	10	std::string worldName	Stable
+world.h	field	zsdk::world::Grip::povAt	11	int32_t povAt	Stable
+world.h	field	zsdk::world::Grip::seconds	12	double seconds	Stable
+world.h	field	zsdk::world::Grip::frame	13	int64_t frame	Stable
+world.h	field	zsdk::world::Grip::frameless	14	bool frameless	Stable
+world.h	field	zsdk::world::Grip::growing	15	bool growing	Stable
+world.h	field	zsdk::world::Grip::fit	16	bool fit	Stable
+world.h	field	zsdk::world::Grip::stable	17	bool stable	Stable
+world.h	field	zsdk::world::Grip::paused	18	bool paused	Stable
+world.h	field	zsdk::world::Grip::first	19	bool first	Stable
+world.h	field	zsdk::world::Grip::since	20	uint64_t since	Stable
+world.h	field	zsdk::world::Grip::polled	21	uint64_t polled	Stable
+world.h	field	zsdk::world::Grip::probed	22	uint64_t probed	Stable
+world.h	field	zsdk::world::Grip::epoch	23	uint32_t epoch	Stable
+world.h	field	zsdk::world::Grip::wait	24	const char *wait	Stable
+world.h	field	zsdk::world::Grip::at	25	uint64_t at	Stable
+world.h	type	zsdk::world::Turn	-	struct Turn	Stable
+world.h	field	zsdk::world::Turn::why	0	const char *why	Stable
+world.h	field	zsdk::world::Turn::world	1	const void *world	Stable
+world.h	field	zsdk::world::Turn::sameWorld	2	bool sameWorld	Stable
+world.h	field	zsdk::world::Turn::epoch	3	uint32_t epoch	Stable
+world.h	fn	zsdk::world::Hold	-	Grip &Hold()	Stable
+world.h	fn	zsdk::world::Snapshot	-	Grip Snapshot()	Stable
+world.h	fn	zsdk::world::Paused	-	bool Paused()	Stable
+world.h	fn	zsdk::world::Epoch	-	uint32_t Epoch()	Stable
+world.h	fn	zsdk::world::WorldOf	-	const void *WorldOf(const void *thing)	Stable
+world.h	fn	zsdk::world::OwningWorld	-	const void *OwningWorld(const void *thing)	Stable
+world.h	fn	zsdk::world::Look	-	bool Look(const void *lens, const void *type, int32_t at, math::Vec3 &loc, math::Rot3 &rot)	Stable
+world.h	fn	zsdk::world::PovAt	-	int32_t PovAt(const void *lens, const void *type)	Stable
+world.h	fn	zsdk::world::Player	-	const void *Player(int verb, const void *context)	Stable
+world.h	fn	zsdk::world::Clock	-	double Clock(const void *context)	Stable
+world.h	fn	zsdk::world::OpenWorld	-	bool OpenWorld()	Stable
+world.h	fn	zsdk::world::Paused	-	bool Paused(const void *context)	Stable

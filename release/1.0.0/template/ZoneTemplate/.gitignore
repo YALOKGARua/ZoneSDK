@@ -1,0 +1,8 @@
+bin/
+build/obj/
+build/last-build.log
+build/.zsdk-build.lock
+build/fakehost/
+dist/*.zip
+dist/*-SHA256.txt
+dist/*/symbols/

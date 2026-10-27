@@ -1,0 +1,9 @@
+samples/*/bin/
+samples/*/obj/
+samples/*/build/obj/
+samples/*/build/last-build.log
+samples/*/build/fakehost/
+samples/*/dist/*.zip
+samples/*/dist/*-SHA256.txt
+samples/*/dist/*/symbols/
+.zsdk-build.lock

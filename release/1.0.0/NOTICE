@@ -1,0 +1,38 @@
+ZoneSDK
+Copyright (c) 2026 YALOKGAR
+Licensed under the MIT License, see LICENSE.
+
+ZoneSDK is a fan-made source library for building ReShade add-ons for
+S.T.A.L.K.E.R. 2: Heart of Chornobyl. It is not made, approved, sponsored or
+endorsed by GSC Game World and is not affiliated with GSC Game World.
+S.T.A.L.K.E.R. and S.T.A.L.K.E.R. 2: Heart of Chornobyl are trademarks of
+their respective owners and are named here only to say which game ZoneSDK
+works with.
+
+Game data
+---------
+
+ZoneSDK contains no game files and no game assets: no game executables or
+parts of them, no packaged game content, models, textures, sounds, maps or
+game texts. It contains only the facts an add-on needs at run time to work
+together with the running game (interoperability):
+
+- short masked search patterns: short runs of machine-code bytes in which the
+  variable positions are masked out, used to find engine structures in the
+  memory of the running game;
+- short byte checks and addresses (offsets from the image base) for specific,
+  identified game builds, used to confirm a known build before a feature that
+  depends on it is switched on;
+- names and parameter layouts of engine functions, classes and properties
+  (data/builds/<build>/ufunctions.txt, build.json and proven.txt).
+
+ZoneSDK does not ship, change or redistribute game files. On a game build it
+does not recognise, an add-on switches the affected features off.
+
+Third-party code
+----------------
+
+The ReShade add-on API headers (extern/reshade), the Dear ImGui headers
+(extern/imgui) and the stb headers that ship with Dear ImGui keep their own
+licences. See THIRD-PARTY-NOTICES.txt and extern/LICENSES. Every add-on built
+with ZoneSDK should carry NOTICE-ADDON.txt.

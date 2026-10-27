@@ -1,0 +1,35 @@
+#include <winver.h>
+#include "version.h"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION FIELDWATCH_VERSION_NUMBER
+PRODUCTVERSION FIELDWATCH_VERSION_NUMBER
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+#if defined(ZSDK_DEBUG)
+FILEFLAGS VS_FF_DEBUG
+#else
+FILEFLAGS 0x0L
+#endif
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_DLL
+FILESUBTYPE 0
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", FIELDWATCH_AUTHOR "\0"
+            VALUE "FileDescription", "ZoneFieldWatch - ZoneSDK sample of guarded game field reads for S.T.A.L.K.E.R. 2\0"
+            VALUE "FileVersion", FIELDWATCH_VERSION "\0"
+            VALUE "InternalName", "ZoneFieldWatch.addon64\0"
+            VALUE "LegalCopyright", FIELDWATCH_COPYRIGHT "\0"
+            VALUE "OriginalFilename", "ZoneFieldWatch.addon64\0"
+            VALUE "ProductName", "ZoneFieldWatch\0"
+            VALUE "ProductVersion", FIELDWATCH_VERSION "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

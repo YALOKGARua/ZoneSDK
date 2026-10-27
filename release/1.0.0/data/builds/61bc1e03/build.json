@@ -1,0 +1,15 @@
+{
+  "id": "61bc1e03",
+  "sha256": "61BC1E030740CEBC30CF1DAD0C86CF65E39E12FF0500225821D684181E08D56B",
+  "file_size": "174798384",
+  "image_size": "0xB963000",
+  "stamp": "0xCD15CBEE",
+  "objects_root": "0xA0E68D0",
+  "objects_count": "0xA0E68E4",
+  "exit_anchor": "0x41E14AE",
+  "exit_store": "0x41E14F5",
+  "exit_flag": "0x9FE3628",
+  "exe": "Stalker2-Win64-Shipping.exe",
+  "game_build_date": "2026-09-18",
+  "dump": "ufunctions.txt is a merge of three partial reflection dumps of this build"
+}
