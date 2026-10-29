@@ -8,7 +8,7 @@ ZoneSDK is a C++ source library for people who write ReShade add-ons for S.T.A.L
 
 ## What you get
 
-- A starter add-on (`release\1.0.0\template\ZoneTemplate`) that `new-addon.cmd` copies into a folder of your own, with a new name, tag, key and toast lane.
+- A starter add-on (`release\1.0.1\template\ZoneTemplate`) that `new-addon.cmd` copies into a folder of your own, with a new name, tag, key and toast lane.
 - Two sample add-ons to read: `samples\ZoneHelloHud` (a HUD panel fed by reflected game functions) and `samples\ZoneFieldWatch` (the safety model for raw memory reads).
 - One-command tools: `doctor.cmd` checks your PC, `build.cmd` / `test.cmd` build and test, `fakehost.cmd` runs your add-on without the game, `build.cmd -Verify` checks a finished file, `pack.cmd` makes the zip for players.
 - The safety model, built in:
@@ -31,12 +31,12 @@ To build add-ons:
 
 To run add-ons in the game:
 
-- S.T.A.L.K.E.R. 2: Heart of Chornobyl, **Steam version**. ZoneSDK 1.0.0 knows two game builds: `2bd3f115`, game version 2.1 "The Zone Lookout" (Steam build 26123434, out on 26 October 2026; its exe is dated 21 October 2026), and `61bc1e03`, game version 2.0.6 (Steam, exe dated 18 September 2026), which stays known. Other editions are not supported. On the Game Pass build an add-on loads, says "This game build is not supported" and changes nothing. On a game build ZoneSDK does not know, for example after a game update, features tied to a known build stay off until ZoneSDK knows the new one; see [docs/PATCH_DAY.md](docs/PATCH_DAY.md).
+- S.T.A.L.K.E.R. 2: Heart of Chornobyl, **Steam version**. ZoneSDK 1.0.1 knows two game builds: `2bd3f115`, game version 2.1 "The Zone Lookout" (Steam build 26123434, out on 26 October 2026; its exe is dated 21 October 2026), and `61bc1e03`, game version 2.0.6 (Steam, exe dated 18 September 2026), which stays known. Other editions are not supported. On the Game Pass build an add-on loads, says "This game build is not supported" and changes nothing. On a game build ZoneSDK does not know, for example after a game update, features tied to a known build stay off until ZoneSDK knows the new one; see [docs/PATCH_DAY.md](docs/PATCH_DAY.md).
 - ReShade 6.8 or newer, the download **with full add-on support** (add-on API 20), installed for the game with DirectX 12.
 
 ### Tested with
 
-ZoneSDK 1.0.0 was tested with MSVC 14.44 (toolset 14.44.35207, Visual Studio 2022 Build Tools) and Windows SDK 10.0.26100.0, on Windows 11 with Windows PowerShell 5.1 and ReShade 6.8.0. Visual Studio 2026 and other MSVC versions in the supported range are accepted but were not tested. If a newer compiler warns about a ZoneSDK file, the build prints `sdk warnings N (compiler newer than tested)` and goes on; warnings in your own code still stop the build.
+ZoneSDK 1.0.1 was tested with MSVC 14.44 (toolset 14.44.35207, Visual Studio 2022 Build Tools) and Windows SDK 10.0.26100.0, on Windows 11 with Windows PowerShell 5.1 and ReShade 6.8.0. Visual Studio 2026 and other MSVC versions in the supported range are accepted but were not tested. If a newer compiler warns about a ZoneSDK file, the build prints `sdk warnings N (compiler newer than tested)` and goes on; warnings in your own code still stop the build.
 
 ## How the toolchain is found
 
@@ -50,7 +50,7 @@ Every build looks for the C++ tools in this order and uses the first one that wo
 
 ## Quick start in 5 commands
 
-Unblock the zip first (see below), then unzip it into a folder for your mods; the zip holds one folder, `ZoneSDK-1.0.0`. Open Command Prompt or PowerShell in `ZoneSDK-1.0.0` and run:
+Unblock the zip first (see below), then unzip it into a folder for your mods; the zip holds one folder, `ZoneSDK-1.0.1`. Open Command Prompt or PowerShell in `ZoneSDK-1.0.1` and run:
 
 ```
 .\doctor.cmd
@@ -71,7 +71,7 @@ Each step is explained in [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md), in
 ## Folder layout
 
 ```
-ZoneSDK-1.0.0\
+ZoneSDK-1.0.1\
   README.md, README-UA.md                this file
   CHANGES.md, CHANGES-UA.md              what changed in each version
   LICENSE, NOTICE, THIRD-PARTY-NOTICES.txt
@@ -79,36 +79,36 @@ ZoneSDK-1.0.0\
   docs\                                  guides in English and Ukrainian
   samples\ZoneHelloHud\                  sample 1
   samples\ZoneFieldWatch\                sample 2
-  release\1.0.0\                         ZoneSDK itself
+  release\1.0.1\                         ZoneSDK itself
     include\zsdk\  src\  extern\  data\  tests\  build\  tools\  api\
     template\ZoneTemplate\               the starter that new-addon copies
     MANIFEST.sha256                      the hash of every file in the release
     NOTICE-ADDON.txt                     goes into every add-on zip
 ```
 
-Never edit anything under `release\1.0.0`: every build compares the release with its `MANIFEST.sha256` and stops if a file changed. The starter cannot be built in place either; `new-addon.cmd` makes your own copy.
+Never edit anything under `release\1.0.1`: every build compares the release with its `MANIFEST.sha256` and stops if a file changed. The starter cannot be built in place either; `new-addon.cmd` makes your own copy.
 
 ### Where your add-on lives, and ZSDK_ROOT
 
 Your add-on is a folder of its own, outside `release\`. Its `build\zsdk.lock` pins the ZoneSDK version and the release manifest it was made with, so it keeps building with exactly that release until you move it. The build finds the release in this order:
 
-1. `ZSDK_ROOT`: the unpacked ZoneSDK folder, the one that holds `release\1.0.0`;
-2. `home=` in `build\zsdk.lock`: a path relative to the add-on folder. `new-addon` writes it when the add-on cannot find the release by itself, for example `home=..\ZoneSDK-1.0.0`;
-3. a walk up the parent folders of the add-on, looking for `release\1.0.0` or `_sdk\release\1.0.0`.
+1. `ZSDK_ROOT`: the unpacked ZoneSDK folder, the one that holds `release\1.0.1`;
+2. `home=` in `build\zsdk.lock`: a path relative to the add-on folder. `new-addon` writes it when the add-on cannot find the release by itself, for example `home=..\ZoneSDK-1.0.1`;
+3. a walk up the parent folders of the add-on, looking for `release\1.0.1` or `_sdk\release\1.0.1`.
 
 A release with another manifest is passed over. When nothing fits, the error lists every place it tried. `build.cmd -Where` prints the release it would use, without building.
 
-If your add-on sits on another drive than the SDK, set `ZSDK_ROOT` before you build. In Command Prompt: `set "ZSDK_ROOT=<folder>\ZoneSDK-1.0.0"`; in PowerShell: `$env:ZSDK_ROOT = '<folder>\ZoneSDK-1.0.0'`. Both last until you close the window.
+If your add-on sits on another drive than the SDK, set `ZSDK_ROOT` before you build. In Command Prompt: `set "ZSDK_ROOT=<folder>\ZoneSDK-1.0.1"`; in PowerShell: `$env:ZSDK_ROOT = '<folder>\ZoneSDK-1.0.1'`. Both last until you close the window.
 
 ## Downloaded zip: Unblock-File and the execution policy
 
 Windows marks files that come from the internet (Mark-of-the-Web). Remove the mark before you unzip: right-click the zip, choose Properties, tick **Unblock** and press OK. Or, in PowerShell, in the folder of the zip:
 
 ```
-Unblock-File -LiteralPath .\ZoneSDK-1.0.0.zip
+Unblock-File -LiteralPath .\ZoneSDK-1.0.1.zip
 ```
 
-If you have already unzipped it, run this in PowerShell inside `ZoneSDK-1.0.0`:
+If you have already unzipped it, run this in PowerShell inside `ZoneSDK-1.0.1`:
 
 ```
 Get-ChildItem -LiteralPath . -Recurse | Unblock-File
@@ -126,13 +126,13 @@ What must differ between add-ons is the **tag**. It names the add-on's one-insta
 
 ## Release manifest
 
-Each release folder is locked by its `MANIFEST.sha256`. The SHA-256 of `release\1.0.0\MANIFEST.sha256` in this package is:
+Each release folder is locked by its `MANIFEST.sha256`. The SHA-256 of `release\1.0.1\MANIFEST.sha256` in this package is:
 
 ```
-0E9BFF3430379491E7EC241B8EA1C9A4BF5F226C6DDA0AF175114E2080409DB8
+A21B6E436296519498775ED30DFD9F0AA616E1402A488199E20F9A9DC7E2D1CF
 ```
 
-To check it, run `Get-FileHash -LiteralPath .\release\1.0.0\MANIFEST.sha256` in PowerShell inside the package folder. Builds print the first 8 characters (`zsdk 1.0.0 manifest XXXXXXXX`), and every add-on writes the same `zsdk 1.0.0 manifest XXXXXXXX` into its log when it starts, so two copies of the same version can be told apart.
+To check it, run `Get-FileHash -LiteralPath .\release\1.0.1\MANIFEST.sha256` in PowerShell inside the package folder. Builds print the first 8 characters (`zsdk 1.0.1 manifest XXXXXXXX`), and every add-on writes the same `zsdk 1.0.1 manifest XXXXXXXX` into its log when it starts, so two copies of the same version can be told apart.
 
 ## Documentation
 
@@ -148,7 +148,7 @@ Every page in this list also comes in Ukrainian, with `-UA` in the name; start f
 
 ## Plans (roadmap)
 
-What comes after 1.0.0, in this order. There are no dates; each step ships when it is ready and tested.
+What comes after 1.0.1, in this order. There are no dates; each step ships when it is ready and tested.
 
 - **1.1**
   - Safe raw calls of native game functions through one shared gate, with a fault log and "Try again".
@@ -172,9 +172,9 @@ Later ideas, not planned yet: support for other editions of the game (Game Pass)
 
 ZoneSDK is made by YALOKGAR and released under the MIT licence: see [LICENSE](LICENSE). You may use it in your own add-ons, change it and share it, as long as the licence text stays with it.
 
-ZoneSDK builds against third-party headers that keep their own licences: the ReShade add-on API headers (BSD-3-Clause or MIT), Dear ImGui 1.92.5 (MIT) and the stb headers that come with it (MIT or public domain). See [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) and `release\1.0.0\extern\LICENSES`.
+ZoneSDK builds against third-party headers that keep their own licences: the ReShade add-on API headers (BSD-3-Clause or MIT), Dear ImGui 1.92.5 (MIT) and the stb headers that come with it (MIT or public domain). See [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) and `release\1.0.1\extern\LICENSES`.
 
-Every add-on built with ZoneSDK contains code from ZoneSDK and those headers, so every add-on zip must carry `NOTICE-ADDON.txt`. `pack.cmd` adds it for you; if you pack by hand, copy `release\1.0.0\NOTICE-ADDON.txt` into your zip.
+Every add-on built with ZoneSDK contains code from ZoneSDK and those headers, so every add-on zip must carry `NOTICE-ADDON.txt`. `pack.cmd` adds it for you; if you pack by hand, copy `release\1.0.1\NOTICE-ADDON.txt` into your zip.
 
 ZoneSDK is fan-made. It is not made, approved or endorsed by GSC Game World and is not affiliated with GSC Game World. S.T.A.L.K.E.R. 2: Heart of Chornobyl is a trademark of its owners and is named here only to say which game ZoneSDK works with. ZoneSDK contains no game files or game assets, only what an add-on needs to work together with the running game: short masked search patterns, addresses and byte checks for known game builds, and the names and parameter layouts of engine functions. See [NOTICE](NOTICE).
 

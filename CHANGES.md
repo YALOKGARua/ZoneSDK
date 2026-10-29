@@ -2,6 +2,22 @@
 
 Ukrainian: [CHANGES-UA.md](CHANGES-UA.md)
 
+## 1.0.1
+
+### Shared game-thread hook
+
+- Windows calls at most 31 `WH_GETMESSAGE` hooks of one thread, and a hook behind them never runs. In 1.0.0 every add-on installed its own hook on the game thread, so with 32 or more hooked add-ons the oldest ones stopped getting ticks. Their Diagnostics showed a pump line like "sent 249, received 2".
+- Add-ons built on 1.0.1 share one hook per game process:
+  - the first one installs it;
+  - the others register their wake message in a small table of the process (`Local\ZoneSDK.Hub.1.<pid>`);
+  - the shared hook wakes each add-on by its own message.
+- Any number of 1.0.1 add-ons uses one hook.
+- Frames are drawn, but no add-on on the shared hook has been woken for 2 s: an add-on then moves the shared hook to the head of the chain, at most once in 3 s. Hooks of other add-ons can no longer push it out. The log says `shared hook moved to the head of the hook chain`.
+- The log line says how an add-on is hooked: `hook: game thread <id>, message <id>, shared hook as the owner` (or `guest`), `<n> add-ons on it`.
+- Add-ons built on 1.0.0 or older keep their own hooks and work next to 1.0.1 add-ons.
+- If the shared table cannot be used, an add-on falls back to its own hook. `ZSDK_SHARED_HOOK=0` in the environment turns the shared hook off.
+- The new `hub` suite starves the shared hook behind 64 extra hooks and checks the move to the head.
+
 ## 1.0.0
 
 First public release.

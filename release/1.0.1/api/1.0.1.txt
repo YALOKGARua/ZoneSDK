@@ -1,5 +1,5 @@
 zsdk-api 1
-version 1.0.0
+version 1.0.1
 app.h	namespace	zsdk	-	-	Stable
 app.h	namespace	zsdk::ini	-	-	Stable
 app.h	type	zsdk::Identity	-	struct Identity	Stable

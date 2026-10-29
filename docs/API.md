@@ -1,6 +1,6 @@
 # ZoneSDK API reference
 
-This is the reference for the C++ API of ZoneSDK 1.0.0: one section for every header in `include/zsdk`. Each section says what the header is for, which thread may call it, its calls and types, a short example and its stability tag.
+This is the reference for the C++ API of ZoneSDK 1.0.1: one section for every header in `include/zsdk`. Each section says what the header is for, which thread may call it, its calls and types, a short example and its stability tag.
 
 Українською: [API-UA.md](API-UA.md).
 
@@ -21,7 +21,7 @@ An add-on built from the template has three kinds of source files. The build com
 
 The SDK sources are compiled into every add-on from a pinned release, so there is no binary interface between add-ons: each add-on has its own copy of ZoneSDK, and add-ons built on different ZoneSDK versions run side by side.
 
-ZoneSDK 1.0.0 knows two Steam builds of S.T.A.L.K.E.R. 2: the exe build `2bd3f115` (game version 2.1, Steam build 26123434) and the exe build `61bc1e03` (game version 2.0.6). It needs ReShade 6.8 or newer with full add-on support (ReShade API 20). On other store builds the add-on loads but stays off and says so. After a game update, features that use the game's reflection usually keep working and byte-guarded features switch themselves off ([PATCH_DAY.md](PATCH_DAY.md)).
+ZoneSDK 1.0.1 knows two Steam builds of S.T.A.L.K.E.R. 2: the exe build `2bd3f115` (game version 2.1, Steam build 26123434) and the exe build `61bc1e03` (game version 2.0.6). It needs ReShade 6.8 or newer with full add-on support (ReShade API 20). On other store builds the add-on loads but stays off and says so. After a game update, features that use the game's reflection usually keep working and byte-guarded features switch themselves off ([PATCH_DAY.md](PATCH_DAY.md)).
 
 ### Thread names
 
@@ -68,7 +68,7 @@ The description of the add-on: who it is, which game functions it calls, its tex
 | `world` | a `WorldVerbs`: where the six world verbs sit in `specs` |
 | `census` | a `CensusSpec`: the class names the census keeps |
 | `rows` | the add-on's language rows (`lang::Row`); the SDK default rows fill every id the add-on does not have |
-| `schema` | the settings schema, an `ini::Schema` from `ini::Make`; ZoneSDK 1.0.0 needs one: without a schema the add-on stays off, gets no data folder, settings or log, and writes one line to the Windows debug output (`ZoneSDK: <name> stays off: the add-on has no settings schema ...`); the generic `identity` suite fails such an add-on |
+| `schema` | the settings schema, an `ini::Schema` from `ini::Make`; ZoneSDK 1.0.1 needs one: without a schema the add-on stays off, gets no data folder, settings or log, and writes one line to the Windows debug output (`ZoneSDK: <name> stays off: the add-on has no settings schema ...`); the generic `identity` suite fails such an add-on |
 | `row` | the add-on's own `registry::Row`: id, tag, toast lane and default keys |
 | `sets` | every `guard::Set` the add-on declares |
 
@@ -357,7 +357,7 @@ Byte guards and typed fields: how an add-on uses a raw offset or address of the 
 | `imageSize`, `stamp` | the PE image size and time stamp |
 | `objectsRoot`, `objectsCount` | where the engine's object array lives in this build |
 
-`k2bd3f115` (game version 2.1, Steam build 26123434) and `k61bc1e03` (game version 2.0.6) are the Steam builds ZoneSDK 1.0.0 knows. `kBuilds` lists every known build, `{ &k61bc1e03, &k2bd3f115 }` in 1.0.0; a patch release may add rows, so do not rely on its length or order. `exe::Build()` and `Find` look only there, and `kImageBase` is the exe's preferred base `0x140000000` (an `Anchor` address is relative to it).
+`k2bd3f115` (game version 2.1, Steam build 26123434) and `k61bc1e03` (game version 2.0.6) are the Steam builds ZoneSDK 1.0.1 knows. `kBuilds` lists every known build, `{ &k61bc1e03, &k2bd3f115 }` in 1.0.1; a patch release may add rows, so do not rely on its length or order. `exe::Build()` and `Find` look only there, and `kImageBase` is the exe's preferred base `0x140000000` (an `Anchor` address is relative to it).
 
 | Type | What it is |
 |---|---|
@@ -1478,7 +1478,7 @@ The ZoneSDK version and the pinned third-party versions.
 | Macro | What it is |
 |---|---|
 | `ZSDK_VERSION_MAJOR`, `ZSDK_VERSION_MINOR`, `ZSDK_VERSION_PATCH` | the version numbers |
-| `ZSDK_VERSION` | the version as text, for example `"1.0.0"` |
+| `ZSDK_VERSION` | the version as text, for example `"1.0.1"` |
 | `ZSDK_VERSION_NUMBER` | the version as `1,0,0,0`, for a version resource |
 | `ZSDK_TEXT(value)` | a macro value as text |
 | `ZSDK_RESHADE_API` | 20, the ReShade API of the bundled headers (ReShade 6.8) |

@@ -2,7 +2,7 @@
 
 A S.T.A.L.K.E.R. 2 update brings a new game exe. Code and data inside it move, so an add-on that reads the game's memory or calls its functions has to be careful on a build it was not made for. This page says what happens then, for players, for add-on authors and for ZoneSDK itself.
 
-ZoneSDK 1.0.0 knows two game builds, both from Steam: `2bd3f115`, game version 2.1 "The Zone Lookout" (Steam build 26123434, released 26 October 2026, exe dated 21 October 2026), and `61bc1e03`, game version 2.0.6 (exe dated 18 September 2026). ZoneSDK supports the Steam version of the game only. On another store's build an add-on loads, shows "This game build is not supported, the add-on changes nothing" and makes no game calls.
+ZoneSDK 1.0.1 knows two game builds, both from Steam: `2bd3f115`, game version 2.1 "The Zone Lookout" (Steam build 26123434, released 26 October 2026, exe dated 21 October 2026), and `61bc1e03`, game version 2.0.6 (exe dated 18 September 2026). ZoneSDK supports the Steam version of the game only. On another store's build an add-on loads, shows "This game build is not supported, the add-on changes nothing" and makes no game calls.
 
 **The promise.** On a game build it does not know, a ZoneSDK add-on switches the parts that depend on the exact build off by itself instead of crashing the game. A new ZoneSDK release that knows the new build follows when that is possible. There is no fixed date for it.
 
@@ -36,7 +36,7 @@ In Steam, open the game's Properties, then Updates, and set automatic updates to
 **1. See whether ZoneSDK knows the build.** `doctor.cmd` reads the installed game and reports it, for example:
 
 ```
-warn  game build 0a1b2c3d is unknown to ZoneSDK 1.0.0, which knows 2bd3f115, 61bc1e03: add-ons built on it start, but their guarded game features stay off until an update
+warn  game build 0a1b2c3d is unknown to ZoneSDK 1.0.1, which knows 2bd3f115, 61bc1e03: add-ons built on it start, but their guarded game features stay off until an update
 ```
 
 For a game folder that Steam does not list, pass it: `.\doctor.cmd -Game "<game folder>"`. The add-on's own log also says it at every start: `exe: <sha256> unknown build, the verb check decides`.

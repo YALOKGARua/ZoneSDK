@@ -8,7 +8,7 @@ The examples use an add-on called `MyHud` and this layout:
 
 ```
 Mods\
-  ZoneSDK-1.0.0\     the unpacked package
+  ZoneSDK-1.0.1\     the unpacked package
   MyHud\             your add-on, made in step 4
 ```
 
@@ -41,12 +41,12 @@ For the test in the game (step 9) you also need the Steam version of the game an
 Windows marks downloaded files (Mark-of-the-Web). Remove the mark from the zip **before** you unzip it: right-click the zip, Properties, tick **Unblock**, OK. Or in PowerShell, in the folder of the zip:
 
 ```
-Unblock-File -LiteralPath .\ZoneSDK-1.0.0.zip
+Unblock-File -LiteralPath .\ZoneSDK-1.0.1.zip
 ```
 
-Then unzip it into `Mods`. The zip holds one folder, `ZoneSDK-1.0.0`.
+Then unzip it into `Mods`. The zip holds one folder, `ZoneSDK-1.0.1`.
 
-Already unzipped without unblocking? Run this in PowerShell inside `ZoneSDK-1.0.0`:
+Already unzipped without unblocking? Run this in PowerShell inside `ZoneSDK-1.0.1`:
 
 ```
 Get-ChildItem -LiteralPath . -Recurse | Unblock-File
@@ -56,7 +56,7 @@ The `.cmd` launchers work even on marked files, because each one runs its script
 
 ## 3. Check the PC: doctor
 
-Open a command window in `Mods\ZoneSDK-1.0.0` and run:
+Open a command window in `Mods\ZoneSDK-1.0.1` and run:
 
 ```
 .\doctor.cmd
@@ -70,7 +70,7 @@ ok    cl.exe 14.44.35228.0 at ...
 ok    Windows SDK 10.0.26100.0, MSVC tools 14.44.35207
 ok    game folder ... (Steam libraryfolders.vdf, 2 libraries)
 ok    ReShade 6.8.0 (dxgi.dll), add-on loader present; ...
-ok    game build 2bd3f115 (2026-10-21) is known to ZoneSDK 1.0.0
+ok    game build 2bd3f115 (2026-10-21) is known to ZoneSDK 1.0.1
 doctor: 0 problems, 1 warnings
 ```
 
@@ -94,7 +94,7 @@ This copies the starter add-on into `Mods\MyHud`, renames everything inside, and
 created MyHud in ...\Mods\MyHud
   define MYHUD, namespace zmyhud, header src\myhud.h
   tag YourNameMyHud, toast lane 0.72 (picked: ...), key ALT+H (picked: ...)
-  ZoneSDK 1.0.0 manifest XXXXXXXX from ...\release\1.0.0 pinned in build\zsdk.lock, home=..\ZoneSDK-1.0.0
+  ZoneSDK 1.0.1 manifest XXXXXXXX from ...\release\1.0.1 pinned in build\zsdk.lock, home=..\ZoneSDK-1.0.1
 ```
 
 The options:
@@ -114,7 +114,7 @@ The options:
 
 What you get in `Mods\MyHud`: `src\` (your code), `tests\` (your tests and `tests\zsdk.cfg`), `build\make.ps1`, `build\pack.ps1`, `build\zsdk.lock`, `dist\README-EN.txt` and `dist\README-UA.txt` (the readmes for players), the launchers `build.cmd`, `test.cmd` and `pack.cmd`, and a `.gitignore` that keeps the build outputs and the zips out of git. At the end `new-addon` prints its next steps. Two of them differ from the steps below: its step 3 is a single fake host run without `-All` (step 6 here runs every mode), and its step 4 is a plain `.\build.cmd -Verify`, which leaves a build that `pack` warns about; use `.\build.cmd -Tests -Verify` (step 7) instead.
 
-`build\zsdk.lock` pins ZoneSDK 1.0.0 and its manifest. `home=..\ZoneSDK-1.0.0` in it tells the build where the release is. If you move the add-on to another drive, set `ZSDK_ROOT` to the ZoneSDK folder instead (see the [README](../README.md)).
+`build\zsdk.lock` pins ZoneSDK 1.0.1 and its manifest. `home=..\ZoneSDK-1.0.1` in it tells the build where the release is. If you move the add-on to another drive, set `ZSDK_ROOT` to the ZoneSDK folder instead (see the [README](../README.md)).
 
 The starter allows comments in your code. If you want the test suite to forbid them, add the line `comments=forbid` to `tests\zsdk.cfg`.
 
@@ -145,7 +145,7 @@ warnings 0
 ## 6. Run it without the game: fakehost
 
 ```
-..\ZoneSDK-1.0.0\fakehost.cmd -Addon bin\MyHud.addon64 -All
+..\ZoneSDK-1.0.1\fakehost.cmd -Addon bin\MyHud.addon64 -All
 ```
 
 The fake host is a small program named like the game exe. It loads your `.addon64` the way ReShade does, presents frames, opens the overlay and the tab, and ends the process in different ways: a normal exit, a kill, an exit while drawing, an exit from another thread, a crash and a quit message. It checks the add-on after every run. The first time it builds itself, which takes a few seconds more. A full run takes about three minutes and ends with:
@@ -154,7 +154,7 @@ The fake host is a small program named like the game exe. It loads your `.addon6
 fake host modes: 116 checks, 0 failures, 35 skipped
 ```
 
-The 35 skipped checks (the groups `gpu`, `job`, `seh`, `report` and `quit`) need ZoneSDK's own fault test add-on, which breaks things on purpose and is not in the package; `-Expect` switches them on for it, and every other add-on skips them. The exit code is the number of failures. Each run's log, settings and result are in `%LOCALAPPDATA%\ZoneSDK\1.0.0\fakehost\harness\MyHud`, with `summary.txt` listing every check.
+The 35 skipped checks (the groups `gpu`, `job`, `seh`, `report` and `quit`) need ZoneSDK's own fault test add-on, which breaks things on purpose and is not in the package; `-Expect` switches them on for it, and every other add-on skips them. The exit code is the number of failures. Each run's log, settings and result are in `%LOCALAPPDATA%\ZoneSDK\1.0.1\fakehost\harness\MyHud`, with `summary.txt` listing every check.
 
 The fake host never starts while the game or another fake host is running. Without `-All` it does one plain run; `new-addon` prints that form with `-Label` and `-Out`, if you only want one log to look at.
 
@@ -195,11 +195,11 @@ Stalker2/Binaries/Win64/MyHud.addon64
 
 Players (and mod managers) unpack it into the game folder. Packing the same build twice gives the same zip. `pack` takes only the Release build, refuses a file with the Debug flag, and warns when a source file is newer than the build or when the build did not pass its tests; `.\pack.cmd -Build` builds and tests first.
 
-`NOTICE-ADDON.txt` carries the licences of ZoneSDK and the headers inside your add-on. If you pack by hand, copy `release\1.0.0\NOTICE-ADDON.txt` from the ZoneSDK folder into your zip.
+`NOTICE-ADDON.txt` carries the licences of ZoneSDK and the headers inside your add-on. If you pack by hand, copy `release\1.0.1\NOTICE-ADDON.txt` from the ZoneSDK folder into your zip.
 
 ## 9. Try it in the game
 
-ZoneSDK 1.0.0 has no installer, so you copy the file by hand:
+ZoneSDK 1.0.1 has no installer, so you copy the file by hand:
 
 1. Close the game.
 2. Copy `bin\MyHud.addon64` into `<game folder>\Stalker2\Binaries\Win64`, next to ReShade's `dxgi.dll`. Or unpack your zip into the game folder, the one that holds `Stalker2`.
@@ -215,7 +215,7 @@ Each add-on keeps its files in `%LOCALAPPDATA%\<its folder>`, for `MyHud` in `%L
 | File | What is in it |
 | --- | --- |
 | `myhud.ini` | The settings, the key, and the safety lists (calls switched off after a crash). |
-| `myhud.log` | The log. Each game session adds its lines at the end; the first lines of a session name the add-on, the language and `zsdk 1.0.0 manifest XXXXXXXX`. |
+| `myhud.log` | The log. Each game session adds its lines at the end; the first lines of a session name the add-on, the language and `zsdk 1.0.1 manifest XXXXXXXX`. |
 | `myhud.1.log` | The older part of the log, moved aside when the log grows past 4 MB at a game start (8 MB while the game runs). |
 | `myhud.exit` | The clean-exit mark, written when the game closes normally. |
 | `report.txt` | Written by **Copy report**, which also puts the same text on the clipboard. User names and personal paths are masked. |
@@ -227,7 +227,7 @@ The language is `auto` at first: a game set to Ukrainian gives Ukrainian texts, 
 ## 11. Uninstall
 
 - The add-on: delete `<game folder>\Stalker2\Binaries\Win64\MyHud.addon64`. To remove its settings and logs too, delete `%LOCALAPPDATA%\MyHud`.
-- ZoneSDK: delete the `ZoneSDK-1.0.0` folder. `%LOCALAPPDATA%\ZoneSDK` holds only the fake host and test work folders; you can delete it at any time, it is made again when needed. `doctor -Selftest` deletes its `%TEMP%\zsdk-scaffold-...` folder after a pass; a folder it kept after a failure can be deleted by hand.
+- ZoneSDK: delete the `ZoneSDK-1.0.1` folder. `%LOCALAPPDATA%\ZoneSDK` holds only the fake host and test work folders; you can delete it at any time, it is made again when needed. `doctor -Selftest` deletes its `%TEMP%\zsdk-scaffold-...` folder after a pass; a folder it kept after a failure can be deleted by hand.
 
 ## 12. Common errors
 
@@ -242,8 +242,8 @@ The language is `auto` at first: a game set to Ukrainian gives Ukrainian texts, 
 | `sdk warnings N (compiler newer than tested)` | Not an error: your compiler is newer than the one ZoneSDK was tested with and warns about an SDK file. The build goes on. |
 | `the build has N warnings in add-on code, 0 are allowed` | Fix the warnings in your own code; they are in `build\last-build.log`. |
 | `tests failed: N; the binary is removed, so neither pack nor an install can ship it: ...` | The `FAIL` lines above it name the suite and the check; a failing `zsdk-*` suite also points to its entry in [RULES.md, section 10](RULES.md#10-the-generic-test-suites). Fix your code and build again with `.\build.cmd -Tests`. |
-| `ZoneSDK 1.0.0 with manifest XXXXXXXX was not found for ... Tried: ...` | The add-on cannot find its release. Set `ZSDK_ROOT` to the ZoneSDK folder, or put `home=<path relative to the add-on>` into `build\zsdk.lock`. If a release is found but "is another build of 1.0.0", you unpacked a different package than the one the add-on was made with: use that package. |
-| `the ZoneSDK snapshot was edited: <file>` (or `... edited: missing <file>`, `... edited: unlisted <file>`) | A file under `release\1.0.0` was changed, removed or added. Unzip the package again; never edit the release. |
+| `ZoneSDK 1.0.1 with manifest XXXXXXXX was not found for ... Tried: ...` | The add-on cannot find its release. Set `ZSDK_ROOT` to the ZoneSDK folder, or put `home=<path relative to the add-on>` into `build\zsdk.lock`. If a release is found but "is another build of 1.0.1", you unpacked a different package than the one the add-on was made with: use that package. |
+| `the ZoneSDK snapshot was edited: <file>` (or `... edited: missing <file>`, `... edited: unlisted <file>`) | A file under `release\1.0.1` was changed, removed or added. Unzip the package again; never edit the release. |
 | `this add-on folder lies inside the ZoneSDK release ...` | The starter is never built in place. Make your own add-on with `new-addon.cmd`. |
 | `the target exists and is never overwritten` | `new-addon` needs a new folder: pick another `-Target`. |
 | `the tag ... is taken in the ZoneSDK registry table` | Pick another `-Tag`, best with your author name in front. |
@@ -252,7 +252,7 @@ The language is `auto` at first: a game set to Ukrainian gives Ukrainian texts, 
 | Two add-ons, one of them never loads | They share a tag. A debug viewer such as DebugView shows `ZoneSDK: <name> does not load: the tag <tag> is already taken ...`. Give one of them another tag and rebuild it. |
 | The tab shows `Parts of MyHud were switched off after an error: <parts>. The log has the details.` | A structured exception (for example an access violation) hit the tab page, the add-on's start or the SDK's core work. The add-on's own tab is then replaced by this text, the log path, **Try again** and **Copy report**. A fault in another part (for example `frame` or a GPU hook) leaves the tab as it is, and Diagnostics lists `present.<lane>` under `Disabled after a crash`. Either way the log has one line `structured exception 0x... at <module>+0x... in the <lane> lane, ...`; with the pdb of that build (step 8) a debugger shows the function and line of a `MyHud.addon64+0x...` offset. Fix the code and rebuild, then press Try again. See [RULES.md](RULES.md#55-when-something-faults). |
 | Diagnostics shows `Game build: <12 hex digits> (other)`, or doctor says `game build ... is unknown` | The game was updated, or this is not one of the Steam builds ZoneSDK knows (`doctor.cmd` lists them). The add-on starts, but features tied to a known build stay off. See [PATCH_DAY.md](PATCH_DAY.md). |
-| The toast `This game build is not supported, the add-on changes nothing` | The game exe is not the Steam build (for example Game Pass), or a game update changed the exe so much that ZoneSDK cannot find the engine in it. ZoneSDK 1.0.0 supports only the Steam version; for an update see [PATCH_DAY.md](PATCH_DAY.md). |
+| The toast `This game build is not supported, the add-on changes nothing` | The game exe is not the Steam build (for example Game Pass), or a game update changed the exe so much that ZoneSDK cannot find the engine in it. ZoneSDK 1.0.1 supports only the Steam version; for an update see [PATCH_DAY.md](PATCH_DAY.md). |
 | fakehost: `a process named Stalker2-Win64-Shipping is running (the game or another fake host); the fake host does not start next to it, ...` | Close the game first. Another fake host run (for example `-Verify` in a second window) counts too, because the fake host has the same name: wait until it ends. |
 | fakehost: one check fails once, then passes | Some checks measure timing. On a busy PC, close heavy programs and run it again. A failure that repeats is a real problem. |
 | `verify: FAIL the binary contains an absolute path: ...` | Your code puts a folder of your PC into the file, for example through `__FILE__` or a literal path. Remove it. |

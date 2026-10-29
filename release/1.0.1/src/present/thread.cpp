@@ -1,6 +1,7 @@
 #include <zsdk/present.h>
 
 #include "../detail/engine_core.h"
+#include "../detail/hub.h"
 #include "../detail/ledger_raw.h"
 #include "../detail/native_bindings.h"
 #include "../detail/quit.h"
@@ -56,6 +57,7 @@ namespace zsdk
         std::atomic<bool> menuOpen{ false };
         std::atomic<bool> rehash{ false };
         std::atomic<bool> hooked{ false };
+        std::atomic<bool> shared{ false };
         std::atomic<bool> sehHalt{ false };
         std::atomic<bool> wireBlocked{ false };
         std::atomic<bool> wireSpent{ false };
@@ -75,6 +77,7 @@ namespace zsdk
         std::atomic<uint64_t> excusedAt{ 0 };
         std::atomic<uint64_t> turns{ 0 };
         std::atomic<uint64_t> wakeAt{ 0 };
+        std::atomic<uint64_t> joinedAt{ 0 };
         std::atomic<uint32_t> knockMs{ 100 };
         std::atomic<HHOOK> hook{ nullptr };
         std::atomic<DWORD> gameThread{ 0 };
@@ -372,6 +375,37 @@ namespace zsdk
             return CallNextHookEx(hook.load(), code, wparam, lparam);
         }
 
+        void Woken()
+        {
+            try
+            {
+                ++seen;
+                wakePending = false;
+                if (!stopping && !quiet) Pump();
+            }
+            catch (...)
+            {
+            }
+        }
+
+        void Quitted()
+        {
+            try
+            {
+                Leave(kQuitWhy, false);
+            }
+            catch (...)
+            {
+            }
+        }
+
+        HMODULE Self()
+        {
+            HMODULE self = nullptr;
+            GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, reinterpret_cast<LPCWSTR>(&Message), &self);
+            return self;
+        }
+
         struct Hunt
         {
             DWORD thread = 0;
@@ -402,12 +436,29 @@ namespace zsdk
         {
             std::lock_guard<std::mutex> hold(hookGate);
             if (stopping) return false;
-            if (hook.load()) return true;
+            if (hooked.load()) return true;
             Hunt hunt;
             EnumWindows(Inspect, reinterpret_cast<LPARAM>(&hunt));
             if (!hunt.thread) return false;
-            HMODULE self = nullptr;
-            GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, reinterpret_cast<LPCWSTR>(&Message), &self);
+            HMODULE self = Self();
+            const detail::hub::Role role = detail::hub::Join(hunt.thread, wakeMessage.load(), &Woken, &Quitted, self);
+            if (role != detail::hub::Role::Off)
+            {
+                gameThread = hunt.thread;
+                shared = true;
+                joinedAt = GetTickCount64();
+                hooked = true;
+                if (stopping)
+                {
+                    shared = false;
+                    detail::hub::Leave(wakeMessage.load());
+                    gameThread = 0;
+                    hooked = false;
+                    return false;
+                }
+                Log("hook: game thread %lu, message %u, shared hook as the %s, %d add-ons on it", hunt.thread, wakeMessage.load(), role == detail::hub::Role::Owner ? "owner" : "guest", detail::hub::Members());
+                return true;
+            }
             HHOOK made = SetWindowsHookExW(WH_GETMESSAGE, Message, self, hunt.thread);
             if (!made)
             {
@@ -751,6 +802,7 @@ namespace zsdk
                 gameThread = 0;
                 if (const HHOOK gone = hook.exchange(nullptr)) UnhookWindowsHookEx(gone);
             }
+            if (shared.exchange(false)) detail::hub::Leave(wakeMessage.load());
             if (workerWake) SetEvent(workerWake);
             if (detail::Exiting()) return;
             if (worker && workerLeft) WaitForSingleObject(workerLeft, kLeaveMs);
@@ -780,7 +832,7 @@ namespace zsdk
             static uint64_t knocked = 0;
             static uint64_t lostPulse = 0;
             const uint64_t now = GetTickCount64();
-            if (!hook.load() && Age(now, hunted) >= kAttachMs)
+            if (!hooked.load() && Age(now, hunted) >= kAttachMs)
             {
                 hunted = now;
                 Attach();
@@ -789,6 +841,11 @@ namespace zsdk
             if (detail::thread::Gap(before, now) || overlayOpen || menuOpen || zsdk::world::Paused() || settling || busy) excusedAt = now;
             detail::job::Stuck(now);
             const bool lost = LostAt(now);
+            if (shared.load() && (lost || (!pulse.load() && Age(now, joinedAt.load()) >= detail::thread::kLostMs)))
+            {
+                static const HMODULE self = Self();
+                if (detail::hub::Rehook(self, now)) Log("shared hook moved to the head of the hook chain, move %llu, %d add-ons on it", static_cast<unsigned long long>(detail::hub::Moves()), detail::hub::Members());
+            }
             if (lost != lostNow.exchange(lost))
             {
                 const uint64_t last = pulse.load();

@@ -2,7 +2,7 @@
 
 #define ZSDK_VERSION_MAJOR 1
 #define ZSDK_VERSION_MINOR 0
-#define ZSDK_VERSION_PATCH 0
+#define ZSDK_VERSION_PATCH 1
 
 #define ZSDK_TEXT_(value) #value
 #define ZSDK_TEXT(value) ZSDK_TEXT_(value)
