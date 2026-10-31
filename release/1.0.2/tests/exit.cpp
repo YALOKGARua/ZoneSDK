@@ -98,6 +98,24 @@ namespace
         SetFileAttributesW(file.c_str(), FILE_ATTRIBUTE_READONLY);
     }
 
+    std::wstring Wide(const std::string &text)
+    {
+        return std::wstring(text.begin(), text.end());
+    }
+
+    std::wstring Env(const std::wstring &name)
+    {
+        wchar_t value[256]{};
+        const DWORD n = GetEnvironmentVariableW(name.c_str(), value, 256);
+        return n && n < 256 ? std::wstring(value, n) : std::wstring();
+    }
+
+    void SetEnv(const std::wstring &name, const std::string &value)
+    {
+        const std::wstring wide = Wide(value);
+        SetEnvironmentVariableW(name.c_str(), value.empty() ? nullptr : wide.c_str());
+    }
+
     std::wstring Self()
     {
         wchar_t self[MAX_PATH]{};
@@ -308,6 +326,67 @@ namespace
         That(!ledger::Unwatch(kWin, std::string()) && !ledger::Calm() && !ini::Save() && scan::Body(Ini(folder)) == body, "after the freeze nothing is written");
         That(ini::Open(folder), "the next start opens");
         That(!ledger::CleanStart() && ledger::Blocked(kWin), "an exit without a mark counts as a crash");
+        ledger::Retry();
+    }
+
+    void Reload(const std::filesystem::path &home)
+    {
+        const std::filesystem::path folder = home / "reload";
+        That(ini::Open(folder), "game 1 opens a fresh data folder");
+        const std::wstring name = ledger::raw::ReloadName();
+        That(name.rfind(L"ZSDK_RELOAD_", 0) == 0 && name.size() > 12, "the reload memo is named after the add-on");
+        SetEnv(name, {});
+        const std::string game1 = ledger::Current();
+        ledger::raw::Leave();
+        That(ini::Open(folder), "game 2, the first load of the add-on");
+        const std::string load1 = ledger::Current();
+        That(ledger::CleanStart() && ledger::Last() == game1, "the first load sees the clean exit of game 1");
+        ledger::Calm();
+        ini::Close();
+        ledger::raw::Unload();
+        That(Env(name) == Wide(std::to_string(GetCurrentProcessId()) + " " + load1 + " 1 " + game1), "an unload by the host leaves the memo: pid, its run, the verdict and the run of the game before");
+        That(!Exists(Exit(folder)), "an unload writes no exit mark");
+        That(ini::Open(folder), "game 2, the second load");
+        const std::string load2 = ledger::Current();
+        That(ledger::CleanStart() && ledger::Last() == game1, "a load after an unload in the same game keeps the verdict about game 1");
+        That(ledger::Disabled().empty() && ledger::Booted().empty() && ledger::Closed().empty(), "the unloaded load counts as clean: nothing is off");
+        That(Env(name).empty(), "the memo is used once");
+        That(Logged(folder, "loaded again in the same game: the load before (run " + load1 + ") was unloaded, not crashed; the game before it ended cleanly (run " + game1 + ")"),
+             "the log says the add-on was loaded again");
+        ledger::Calm();
+        ini::Close();
+        ledger::raw::Unload();
+        That(ini::Open(folder) && ledger::CleanStart() && ledger::Last() == game1 && ledger::Current() != load2, "a third load keeps the verdict too");
+        That(ledger::Watch(kWin), "game 2 opens a crash window");
+        ledger::raw::Freeze();
+        That(Env(name).empty(), "a crash leaves no memo");
+        That(ini::Open(folder), "game 3, the first load");
+        const std::string game2 = ledger::Last();
+        That(!ledger::CleanStart() && ledger::Blocked(kWin), "game 3 sees the crash of game 2 and turns the window off");
+        ledger::Calm();
+        ini::Close();
+        ledger::raw::Unload();
+        That(ini::Open(folder), "game 3, the second load");
+        That(!ledger::CleanStart() && ledger::Last() == game2 && ledger::Blocked(kWin), "a reload in game 3 still says game 2 did not end cleanly and keeps the window off");
+        That(Logged(folder, "the game before it did not end cleanly (run " + game2 + ")"), "the log names the game that did not end cleanly");
+        ledger::Retry();
+        That(ledger::Watch(kImage), "a load opens a crash window and is unloaded with it still open");
+        ini::Close();
+        ledger::raw::Unload();
+        That(ini::Open(folder) && !ledger::Blocked(kImage) && ledger::Closed() == List{ kImage }, "a window left open by an unloaded load is closed, not turned off");
+        const std::string mine = ledger::Current();
+        ini::Close();
+        SetEnv(name, "1 " + mine + " 1 -");
+        That(ini::Open(folder) && !ledger::CleanStart() && ledger::Last() == mine, "a memo of another process is not trusted");
+        SetEnv(name, {});
+        ini::Close();
+        SetEnv(name, std::to_string(GetCurrentProcessId()) + " 0123456789ABCDEF0123456789ABCDEF 1 -");
+        That(ini::Open(folder) && !ledger::CleanStart(), "a memo of another run is not trusted");
+        SetEnv(name, {});
+        ini::Close();
+        SetEnv(name, std::to_string(GetCurrentProcessId()) + " " + ledger::Current() + " 2 -");
+        That(ini::Open(folder) && !ledger::CleanStart(), "a malformed memo is not trusted");
+        SetEnv(name, {});
         ledger::Retry();
     }
 
@@ -598,6 +677,12 @@ namespace
         const std::string testRaw = scan::Body(sdk / "include" / "zsdk" / "test" / "ledger_raw.h");
         That(!Shared(detailRaw).empty() && Shared(detailRaw) == Shared(testRaw), "the test ledger header repeats the internal exit declarations byte for byte");
         That(detailRaw.find("void Freeze();") != std::string::npos && detailRaw.find("void Leave();") != std::string::npos && testRaw.find("void Leave();") != std::string::npos, "Freeze and Leave are raw ledger calls");
+        That(detailRaw.find("void Unload();") != std::string::npos && testRaw.find("void Unload();") != std::string::npos, "Unload is a raw ledger call");
+        const size_t memo = unload == std::string::npos ? unload : shell.find("ledger::raw::Unload();", unload);
+        const size_t saved = unload == std::string::npos ? unload : shell.find("ini::Close();", unload);
+        That(memo != std::string::npos && saved != std::string::npos && saved < memo && scan::Count(shell, "ledger::raw::Unload()") == 1, "an unload by FreeLibrary leaves the reload memo once, after the ini is saved");
+        const std::string reload = Of(ini, "Unload");
+        That(!reload.empty() && First(reload, "ini::frozen.load()", "SetEnvironmentVariableW"), "a frozen ledger leaves no reload memo");
     }
 }
 
@@ -607,7 +692,7 @@ int wmain(int argc, wchar_t **argv)
     if (argc == 5 && std::wstring(argv[1]) == L"hold") return Hold(std::filesystem::path(argv[2]), argv[3], argv[4]);
     const std::filesystem::path home = scan::EnvPath("ZSDK_TEST_HOME", std::filesystem::temp_directory_path());
     std::error_code code;
-    for (const char *one : { "z", "clean", "frozen", "freeze", "child", "crash", "after", "pending", "series", "stuck", "unwritable", "old", "older" }) std::filesystem::remove_all(home / one, code);
+    for (const char *one : { "z", "clean", "frozen", "freeze", "child", "crash", "after", "pending", "series", "stuck", "unwritable", "old", "older", "reload" }) std::filesystem::remove_all(home / one, code);
     Unarmed(home);
     Pure();
     Text();
@@ -622,6 +707,7 @@ int wmain(int argc, wchar_t **argv)
     Stuck(home);
     Unwritable(home);
     Older(home);
+    Reload(home);
     Sources();
     return check::Finish("exit");
 }

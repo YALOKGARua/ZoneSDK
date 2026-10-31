@@ -2,6 +2,20 @@
 
 Ukrainian: [CHANGES-UA.md](CHANGES-UA.md)
 
+## 1.0.2
+
+### The clean-exit verdict survives a reload of the add-on
+
+- While the game starts, ReShade loads and unloads add-ons several times. In 1.0.1 every load opened the data folder again, and only the first one found the exit mark of the last game; it also used the mark up. The loads after it found no mark, so `ledger::CleanStart()` reported a crash after every clean exit, and `ledger::Last()` named the unloaded load instead of the last game.
+- An unload by the host (`FreeLibrary`, the game goes on) now leaves a short memo in the environment of the process, `ZSDK_RELOAD_<data folder>`: the process id, the run of the unloaded load, its verdict and the run of the game before it.
+- The next load in the same process matches the memo by process id and run:
+  - the unloaded load counts as clean, so the crash windows it left open are closed, not turned off;
+  - `CleanStart()` and `Last()` keep the verdict about the game before;
+  - the log says `loaded again in the same game`.
+- The memo is used once. A memo of another process, of another run or with a bad field is ignored.
+- A crash still counts as one: an unload never writes the exit mark, and a game that crashes leaves no memo.
+- The add-on API does not change. Add-ons get the fix when they are rebuilt on 1.0.2.
+
 ## 1.0.1
 
 ### Shared game-thread hook

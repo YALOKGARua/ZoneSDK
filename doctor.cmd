@@ -1,7 +1,7 @@
 @echo off
 if "%~1"=="/?" goto zsdk_help
-call "%~dp0release\1.0.1\doctor.cmd" %*
+call "%~dp0release\1.0.2\doctor.cmd" %*
 exit /b %errorlevel%
 :zsdk_help
-call "%~dp0release\1.0.1\doctor.cmd" -?
+call "%~dp0release\1.0.2\doctor.cmd" -?
 exit /b %errorlevel%

@@ -438,6 +438,7 @@ namespace zsdk::shell
                 Unregister(module);
                 ledger::Calm();
                 ini::Close();
+                ledger::raw::Unload();
                 if (guard) CloseHandle(guard);
                 guard = nullptr;
             }

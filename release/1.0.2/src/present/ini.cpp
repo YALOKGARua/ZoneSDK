@@ -68,6 +68,7 @@ namespace zsdk::ini
         std::atomic<int> slipAt{ -1 };
         Slip slips[2]{};
         wchar_t markPath[1024]{};
+        wchar_t reloadName[96]{};
         bool dirty = false;
         uint64_t changedAt = 0;
         uint64_t saveDelay = kSaveDelayMs;
@@ -502,6 +503,71 @@ namespace zsdk::ini
             slipAt.store(next);
         }
 
+        struct Memo
+        {
+            bool ok = false;
+            unsigned long pid = 0;
+            std::string session;
+            bool clean = false;
+            std::string last;
+        };
+
+        void Named(const wchar_t *tag)
+        {
+            reloadName[0] = 0;
+            std::wstring name = L"ZSDK_RELOAD_";
+            for (const wchar_t *p = tag; p && *p; ++p)
+            {
+                const wchar_t c = *p;
+                if ((c >= L'0' && c <= L'9') || (c >= L'A' && c <= L'Z')) name += c;
+                else if (c >= L'a' && c <= L'z') name += static_cast<wchar_t>(c - 32);
+                else name += L'_';
+            }
+            if (name.size() >= std::size(reloadName)) return;
+            std::copy(name.begin(), name.end(), reloadName);
+            reloadName[name.size()] = 0;
+        }
+
+        Memo Recall()
+        {
+            Memo out;
+            if (!reloadName[0]) return out;
+            wchar_t value[192]{};
+            const DWORD n = GetEnvironmentVariableW(reloadName, value, static_cast<DWORD>(std::size(value)));
+            if (!n || n >= std::size(value)) return out;
+            std::string text;
+            for (DWORD i = 0; i < n; ++i)
+            {
+                if (value[i] < 0x20 || value[i] > 0x7E) return out;
+                text += static_cast<char>(value[i]);
+            }
+            std::vector<std::string> parts;
+            size_t from = 0;
+            while (from <= text.size())
+            {
+                const size_t to = text.find(' ', from);
+                parts.push_back(text.substr(from, to == std::string::npos ? std::string::npos : to - from));
+                if (to == std::string::npos) break;
+                from = to + 1;
+            }
+            if (parts.size() != 4 || parts[0].empty() || parts[0].size() > 10) return out;
+            for (const char c : parts[0])
+                if (c < '0' || c > '9') return out;
+            if (!ledger::Session(parts[1]) || (parts[2] != "0" && parts[2] != "1")) return out;
+            if (parts[3] != "-" && !ledger::Session(parts[3])) return out;
+            out.pid = std::strtoul(parts[0].c_str(), nullptr, 10);
+            out.session = parts[1];
+            out.clean = parts[2] == "1";
+            out.last = parts[3] == "-" ? std::string() : parts[3];
+            out.ok = true;
+            return out;
+        }
+
+        void Forget()
+        {
+            if (reloadName[0]) SetEnvironmentVariableW(reloadName, nullptr);
+        }
+
         bool WriteNow(const char *why)
         {
             if (frozen.load()) return false;
@@ -766,7 +832,13 @@ namespace zsdk::ini
         const bool marked = ReadFile(stop, mark, ledger::kMarkMost);
         DWORD error = 0;
         const bool removed = Drop(stop, error);
-        ledger::Leftover left = ledger::Judge(marked ? std::string_view(mark) : std::string_view(), keep.session, had ? ledger::Seal(text) : std::string(), keep.pending, keep.watch);
+        Named(id.folder);
+        const Memo memo = Recall();
+        const bool reloaded = had && memo.ok && memo.pid == GetCurrentProcessId() && memo.session == keep.session;
+        const std::string seal = had ? ledger::Seal(text) : std::string();
+        const std::string vouched = reloaded ? ledger::Mark(keep.session, seal) : std::string();
+        ledger::Leftover left = ledger::Judge(reloaded ? std::string_view(vouched) : marked ? std::string_view(mark) : std::string_view(), keep.session, seal, keep.pending, keep.watch);
+        if (reloaded) Forget();
         const std::string last = ledger::Session(keep.session) ? keep.session : std::string();
         const std::string shown = last.empty() ? std::string("-") : last;
         const std::string pending = keep.pending;
@@ -802,7 +874,7 @@ namespace zsdk::ini
             kept = keep;
             booted = fresh;
             closed = left.closed;
-            previous = last;
+            previous = reloaded ? memo.last : last;
             inflight.clear();
             dirty = false;
             body = TextRaw(Held().data, kept);
@@ -832,13 +904,17 @@ namespace zsdk::ini
             }
             revision.fetch_add(1);
         }
-        cleanStart = left.clean;
+        cleanStart = reloaded ? memo.clean : left.clean;
         stuck = !removed;
         Log("%s %s data at %s, settings %s%s", id.name, id.version, log::Shown(base).c_str(), had ? "loaded" : "created", wrote ? "" : ", the ini write failed");
         const uint32_t windows = app::Get().policy.watchKept;
         if (windows == 0 || windows > Limits::kWatchCap)
             Log("safety: policy watchKept %u is refused, it must be 1 to %zu, the ledger keeps %zu windows", static_cast<unsigned>(windows), Limits::kWatchCap, Limits::kWatchKept);
-        if (left.clean)
+        if (reloaded && !doubt)
+            Log("safety: loaded again in the same game: the load before (run %s) was unloaded, not crashed%s%s; the game before it %s (run %s)", shown.c_str(),
+                left.closed.empty() ? "" : ", the crash windows it left open are closed: ", Joined(left.closed).c_str(), memo.clean ? "ended cleanly" : "did not end cleanly",
+                memo.last.empty() ? "-" : memo.last.c_str());
+        else if (left.clean)
             Log("safety: the last run %s ended cleanly (exit mark found)%s%s", shown.c_str(), left.closed.empty() ? ", no crash window was left open" : ", the crash windows it left open are closed: ",
                 Joined(left.closed).c_str());
         else if (doubt) Log("safety: the exit mark of the last run %s can be neither removed nor outdated by a new ini, it is not trusted and the run counts as a crash", shown.c_str());
@@ -1203,6 +1279,26 @@ namespace zsdk::ledger
             DWORD wrote = 0;
             ::WriteFile(file, slip.body, slip.size, &wrote, nullptr);
             CloseHandle(file);
+        }
+
+        void Unload()
+        {
+            if (ini::frozen.load() || !ini::reloadName[0]) return;
+            std::string session;
+            std::string last;
+            {
+                std::lock_guard<std::mutex> hold(ini::gate);
+                session = ini::kept.session;
+                last = ini::previous;
+            }
+            if (!Session(session) || (!last.empty() && !Session(last))) return;
+            const std::string value = std::to_string(GetCurrentProcessId()) + " " + session + (ini::cleanStart.load() ? " 1 " : " 0 ") + (last.empty() ? std::string("-") : last);
+            SetEnvironmentVariableW(ini::reloadName, std::wstring(value.begin(), value.end()).c_str());
+        }
+
+        std::wstring ReloadName()
+        {
+            return ini::reloadName;
         }
     }
 

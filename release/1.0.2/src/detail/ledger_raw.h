@@ -35,4 +35,6 @@ namespace zsdk::ledger::raw
     bool Disable(const std::string &key);
     void Freeze();
     void Leave();
+    void Unload();
+    std::wstring ReloadName();
 }
